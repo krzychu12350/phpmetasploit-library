@@ -13,13 +13,13 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Krzychu12350\\Phpmetasploit\\": "src/"
+            "Phpmetasploit\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                    "Krzychu12350\\Phpmetasploit\\Commands"
+                    "Phpmetasploit\\Commands"
             ]
         }
     }

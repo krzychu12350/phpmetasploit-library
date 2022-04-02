@@ -1,8 +1,8 @@
 <?php
 
-namespace Krzychu12350\Phpmetasploit;
+namespace Phpmetasploit;
 
-class Commands
+public class Commands
 {
     public function msfAuth()
     {
