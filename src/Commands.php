@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpmetasploit;
+namespace Krzychu12350\Phpmetasploit;
 
 class Commands
 {
