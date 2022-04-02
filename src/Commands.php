@@ -2,7 +2,7 @@
 
 namespace Phpmetasploit;
 
-public class Commands
+class Commands
 {
     public function msfAuth()
     {
