@@ -5,7 +5,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Krzysztof Karas",
+            "name": "Krzychu12350",
             "email": "krzysztofkaras98@gmail.com"
         }
     ],
@@ -13,15 +13,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Phpmetasploit\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                    "Phpmetasploit\\Commands"
-            ]
+            "Krzychu12350\\Phpmetasploit\\": "src/"
         }
     }
-
 }
