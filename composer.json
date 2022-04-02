@@ -1,0 +1,27 @@
+{
+    "name": "krzychu12350/phpmetasploit",
+    "description": "This library allow to interact with Metasploit either through msfrpcd or the msgrpc plugin in msfconsole.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Krzysztof Karas",
+            "email": "krzysztofkaras98@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Krzychu12350\\Phpmetasploit\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                    "Krzychu12350\\Phpmetasploit\\PhpmetasploitServiceProvider"
+            ]
+        }
+    }
+
+},
