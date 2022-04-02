@@ -4,8 +4,8 @@ namespace Krzychu12350\Phpmetasploit;
 
 class Commands
 {
-    public function msfAuth($string): string
+    public function msfAuth()
     {
-        return "You are connect with Metasploit Framework". $string;
+        return "You are connect with Metasploit Framework";
     }
 }
