@@ -19,7 +19,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                    "Krzychu12350\\Phpmetasploit\\PhpmetasploitServiceProvider"
+                    "Krzychu12350\\Phpmetasploit\\Commands"
             ]
         }
     }
