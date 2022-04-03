@@ -10,7 +10,12 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "ext-curl": "*",
+        "lib-curl-zlib": "^1.2",
+        "curl/curl": "^2.3",
+        "rybakit/msgpack": "^0.9.1"
+    },
     "autoload": {
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src/"
