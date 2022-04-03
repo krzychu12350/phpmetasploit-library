@@ -7,9 +7,9 @@ use MessagePack\Packer;
 
 class Commands
 {
-    public function msfAuth()
+    public function msfAuth(String $string)
     {
-        return "You are connect with Metasploit Framework";
+        return "Biggest Lord of Existence is:" . $string;
     }
     // ************ curl_post() ************ //
     public function curl_post($url, $port, $httpheader, $postfields): array
