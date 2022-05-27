@@ -24,8 +24,13 @@
         }
     },
     "scripts": {
+            "test": [
+                "@php --version"
+            ],
+        "generate-files": "src/MsfRpcClient.php::createApiMethods",
         "post-package-install": [
-            "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods"
+            "@composer dump-autoload",
+            "@php src\\script.php"
         ]
     }
 }
