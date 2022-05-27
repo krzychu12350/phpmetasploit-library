@@ -19,7 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Krzychu12350\\Phpmetasploit\\": "src/"
+            "Krzychu12350\\Phpmetasploit\\": "src"
         }
+    },
+    "scripts": {
+        "post-package-install": [
+            "krzychu12350/phpmetasploit::createApiMethods"
+        ]
     }
 }

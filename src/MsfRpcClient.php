@@ -2,34 +2,72 @@
 
 namespace Krzychu12350\Phpmetasploit;
 
+use http\Message\Body;
 use JetBrains\PhpStorm\Pure;
 use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
 
 
+
 class MsfRpcClient
 {
-
-    public string $userPassword;
+    //TO DO: zapisać te argumenty do sesji i stworzyć z tego osobną klasą
+    private string $userPassword;
     public string $ssl;
     public string $userName;
     public string $ip;
     public int $port;
     public string $webServerURI;
+    //private string $token;
 
     function __construct($userPassword,$ssl,$userName,$ip,$port,$webServerURI) {
+        if(!isset($_SESSION)) session_start();
+
         $this->userPassword  = $userPassword;
+        $_SESSION["userPassword"] = $this->userPassword;
         //$this->ssl = $ssl;
-        if($ssl == 'true') $this->ssl = "https://";
-        if($ssl == 'false') $this->ssl = "http://";
+
+        if($ssl == 'true')  {
+            $this->ssl = "https://";
+            $_SESSION["ssl"] = $this->ssl;
+        }
+        if($ssl == 'false') {
+            $this->ssl = "http://";
+            $_SESSION["ssl"] = $this->ssl;
+        }
+
+        //$this->ssl = "https://";
+
         $this->userName = $userName;
+        $_SESSION["userName"] = $this->userName;
         $this->ip = $ip;
+        $_SESSION["ip"] = $this->ip;
         $this->port = $port;
+        $_SESSION["port"] = $this->port;
         $this->webServerURI = $webServerURI;
+        $_SESSION["webServerURI"] = $this->webServerURI;
+        #
     }
 
 
+    /**
+     * @return string
+     */
+    public function getUserPassword(): string
+    {
+        return $this->userPassword;
+    }
+    //TO DO: setter z tokenem
+    /*
+    public function setToken($token){
+        $this->token = $token;
+    }
+
+    public function getToken(){
+        return $this->token;
+    }
+    */
     // ************ curlPost() ************ //
     public function curlPost($url, $port, $httpheader, $postfields): array {
         $ch = curl_init();
@@ -100,12 +138,15 @@ class MsfRpcClient
         $msgunpack_data = $unpacker->unpack();
         $generateToken = $msgunpack_data["token"];
 
-        session_start();
+        //$this->setToken($generateToken);
+
+        //session_start();
         $_SESSION["token"] = $generateToken;
+
         //dd($_SESSION["token"]);
 
         //Generating API Methods from array
-        $this->createApiMethods();
+        //$this->createApiMethods();
 
         return $generateToken;
     }
@@ -131,6 +172,7 @@ class MsfRpcClient
     //Genereting methods with
     public function createApiMethods() {
 
+        //13 metod, które trzeba ręcznie napisać
         //-----------------------Core-----------------------
         $apiMethods = [
             //-----------------------Authentication-----------------------
@@ -152,22 +194,60 @@ class MsfRpcClient
             [ "core.version", "<token>"],
             [ "core.stop", "<token>"],
 
-            /*
             //-----------------------Console-----------------------
             [ "console.create", "<token>"],
             [ "console.destroy", "<token>", "ConsoleID"],
             [ "console.list", "<token>"],
-            [ "console.write", "<token>", "0", "version\n"],
-            [ "console.read", "<token>", "0"],
+            //[ "console.write", "<token>", "0", "version\n"],
+            //[ "console.read", "<token>", "0"],
             [ "console.session_detach", "<token>", "ConsoleID"],
             [ "console.session_kill", "<token>", "ConsoleID"],
-            [ "console.tabs", "<token>", "ConsoleID", "InputLine"]
-            */
+            [ "console.tabs", "<token>", "ConsoleID", "InputLine"],
+
             //-----------------------Jobs-----------------------
             [ "job.list", "<token>"],
             [ "job.info", "<token>", "JobID"],
             // nie może być w jednym pliku bo metoda stop juz jest z core grupy metod
             [ "job.stop", "<token>", "JobID"],
+
+            //-----------------------Modules-----------------------
+            [ "module.exploits", "<token>" ],
+            [ "module.auxiliary", "<token>" ],
+            [ "module.post", "<token>" ],
+            [ "module.payloads", "<token>" ],
+            [ "module.encoders", "<token>" ],
+            [ "module.nops", "<token>" ],
+            [ "module.info", "<token>", "ModuleType", "ModuleName" ],
+            [ "module.options", "<token>", "ModuleType", "ModuleName" ],
+            [ "module.compatible_payloads", "<token>", "ModuleName" ],
+            //[ "module.target_compatible_payloads", "<token>", "ModuleName", 1 ],
+            [ "module.compatible_sessions", "<token>", "ModuleName" ],
+            //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
+            //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
+            // Wyrzuca błąd przy nawiasach klamrowych może byc jedynie zagnieżdzona jeszcze tablica
+            //[ "module.execute", "<token>", "ModuleType", "ModuleName", {"LHOST" => "4.3.2.1", "LPORT" => "4444"}],
+
+            //-----------------------Plugins-----------------------
+            //[ "plugin.load", "<token>", "PluginName", ["Option1" => "Value1", "Option2" => "Value2"]],
+            [ "plugin.unload", "<token>", "PluginName" ],
+            [ "plugin.loaded", "<token>" ],
+            //-----------------------Sessions-----------------------
+            [ "session.list", "<token>" ],
+            [ "session.stop", "<token>", "SessionID" ],
+            [ "session.shell_read", "<token>", "SessionID", "ReadPointer" ],
+            //[ "session.shell_write", "<token>", "SessionID", "id\n" ],
+            //[ "session.meterpreter_write", "<token>", "SessionID", "ps" ],
+            [ "session.meterpreter_read", "<token>", "SessionID"],
+            //[ "session.meterpreter_run_single", "<token>", "SessionID", "ps" ],
+            //["session.meterpreter_script","<token>","SessionID","scriptname"],
+            [ "session.meterpreter_session_detach", "<token>", "SessionID" ],
+            //[ "session.meterpreter_session_detach", "<token>", "SessionID" ],
+            [ "session.meterpreter_tabs", "<token>", "SessionID", "InputLine"],
+            [ "session.compatible_modules", "<token>", "SessionID" ],
+            //[ "session.shell_upgrade", "<token>", "SessionID", "1.2.3.4", 4444 ],
+            [ "session.ring_clear", "<token>", "SessionID" ],
+            [ "session.ring_last", "<token>", "SessionID" ],
+            //[ "session.ring_put", "<token>", "SessionID", "id\n" ],
 
         ];
 
@@ -222,6 +302,7 @@ class MsfRpcClient
                     $substr1 = substr($apiMethods[$i][0], strpos($apiMethods[$i][0], ".") + 1);
                     if (str_contains($substr1, '_'))
                         $substr1 = explode('_', $substr1)[0] . ucwords(explode('_', $substr1)[1]);
+
                     $method = $class->addMethod($substr1);
 
 
@@ -265,6 +346,40 @@ class MsfRpcClient
                             $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
                     }
                 }
+
+            }
+
+            if($methodsGroup = "module") {
+                //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
+                $method = $class->addMethod('encode')
+                    ->setBody('
+                        $clientRequest = [$token, $data, $encoderModule, $optionsArray];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("token");
+                $method->addParameter("data");
+                $method->addParameter("encoderModule");
+                $method->addParameter("optionsArray");
+
+                $method = $class->addMethod('execute')
+                    ->setBody('
+                        $clientRequest = [$token, $moduleType, $moduleName,$optionsArray];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("token");
+                $method->addParameter("moduleType");
+                $method->addParameter("moduleName");
+                $method->addParameter("optionsArray");
+                //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
+                //dd($method);
+
+                // "module.target_compatible_payloads", "<token>", "ModuleName", 1 ],
+                 $method = $class->addMethod('targetCompatiblePayloads')
+                     ->setBody('
+                        $clientRequest = [$token, $moduleName, $target];'
+                         . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("token");
+                $method->addParameter("moduleName");
+                $method->addParameter("target");
+
             }
 
             //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
@@ -284,7 +399,6 @@ class MsfRpcClient
             //($myfile);
             //return $class;
         }
-
     }
 
     /*
