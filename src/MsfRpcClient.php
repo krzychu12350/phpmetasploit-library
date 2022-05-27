@@ -8,20 +8,34 @@ use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
 
+require '../vendor/autoload.php';
 
 
 class MsfRpcClient
 {
+
     //TO DO: zapisać te argumenty do sesji i stworzyć z tego osobną klasą
+    /*
+     * Zrobić ogolna klase abstracyjna te ktore cos robia
+     * Ta klasa abstrakcyjna ma jeszcze jakas plole ktore ma pole jeszcze innej klasy
+     *  najpieerw stworzyc klase conntector ktora bedzie trzymala 'polaczenie' i dane autoryzacyjne
+     * w kazdej klasie bede mogl sie do tego pola odniesc a inicjalizacje podaje w konstruktorze
+     * getterem pobrac poloczenie i wrzucic do constructora
+     *
+     * biore getterem connection 1 i 2 wywoluje getConnection albo uzyc tego polaczenia
+     * to co jest wspolne do klasy abstrackja klasy abstrakcyjnej np. MsfRpcClient i kolejna Connection
+     * w konstrukturze klsay MsfRpcClient 'wpinam' obiekt klasy Connection
+     */
     private string $userPassword;
     public string $ssl;
     public string $userName;
     public string $ip;
     public int $port;
     public string $webServerURI;
-    //private string $token;
+    private string $token;
 
     function __construct($userPassword,$ssl,$userName,$ip,$port,$webServerURI) {
+
         if(!isset($_SESSION)) session_start();
 
         $this->userPassword  = $userPassword;
@@ -59,7 +73,7 @@ class MsfRpcClient
         return $this->userPassword;
     }
     //TO DO: setter z tokenem
-    /*
+
     public function setToken($token){
         $this->token = $token;
     }
@@ -67,7 +81,7 @@ class MsfRpcClient
     public function getToken(){
         return $this->token;
     }
-    */
+
     // ************ curlPost() ************ //
     public function curlPost($url, $port, $httpheader, $postfields): array {
         $ch = curl_init();
@@ -138,7 +152,7 @@ class MsfRpcClient
         $msgunpack_data = $unpacker->unpack();
         $generateToken = $msgunpack_data["token"];
 
-        //$this->setToken($generateToken);
+        $this->setToken($generateToken);
 
         //session_start();
         $_SESSION["token"] = $generateToken;
@@ -175,6 +189,7 @@ class MsfRpcClient
         //13 metod, które trzeba ręcznie napisać
         //-----------------------Core-----------------------
         $apiMethods = [
+            /*
             //-----------------------Authentication-----------------------
             [ "auth.login", "MyUserName", "MyPassword"],
             [ "auth.logout", "<token>", "<LogoutToken>"],
@@ -182,6 +197,7 @@ class MsfRpcClient
             [ "auth.token_generate", "<token>"],
             [ "auth.token_list", "<token>"],
             [ "auth.token_remove", "<token>", "<TokenToBeRemoved>"],
+            */
             //-----------------------Core-----------------------
             [ "core.add_module_path", "<token>", "<Path>"],
             [ "core.module_stats", "<token>"],
@@ -209,7 +225,7 @@ class MsfRpcClient
             [ "job.info", "<token>", "JobID"],
             // nie może być w jednym pliku bo metoda stop juz jest z core grupy metod
             [ "job.stop", "<token>", "JobID"],
-
+            /*
             //-----------------------Modules-----------------------
             [ "module.exploits", "<token>" ],
             [ "module.auxiliary", "<token>" ],
@@ -226,7 +242,7 @@ class MsfRpcClient
             //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
             // Wyrzuca błąd przy nawiasach klamrowych może byc jedynie zagnieżdzona jeszcze tablica
             //[ "module.execute", "<token>", "ModuleType", "ModuleName", {"LHOST" => "4.3.2.1", "LPORT" => "4444"}],
-
+            */
             //-----------------------Plugins-----------------------
             //[ "plugin.load", "<token>", "PluginName", ["Option1" => "Value1", "Option2" => "Value2"]],
             [ "plugin.unload", "<token>", "PluginName" ],
