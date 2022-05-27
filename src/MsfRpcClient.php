@@ -8,9 +8,6 @@ use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
 
-require '../vendor/autoload.php';
-
-
 class MsfRpcClient
 {
 
