@@ -2,12 +2,11 @@
 
 namespace Krzychu12350\Phpmetasploit;
 
-use http\Message\Body;
-use JetBrains\PhpStorm\Pure;
 use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
-require dirname( __DIR__). '\vendor\autoload.php';
+
+require dirname(__DIR__) . '\vendor\autoload.php';
 
 class MsfRpcClient
 {
@@ -24,44 +23,37 @@ class MsfRpcClient
      * to co jest wspolne do klasy abstrackja klasy abstrakcyjnej np. MsfRpcClient i kolejna Connection
      * w konstrukturze klsay MsfRpcClient 'wpinam' obiekt klasy Connection
      */
+    private string $ssl;
+    private string $userName;
+    private string $ip;
+    private int $port;
+    private string $webServerURI;
     private string $userPassword;
-    public string $ssl;
-    public string $userName;
-    public string $ip;
-    public int $port;
-    public string $webServerURI;
     private string $token;
 
-    function __construct($userPassword,$ssl,$userName,$ip,$port,$webServerURI) {
+    function __construct($userPassword,$ssl,$userName,$ip,$port, $webServerURI)
+    {
+        MsfConnector::setUserPassword($userPassword);
+        MsfConnector::setSsl($ssl);
+        MsfConnector::setUserName($userName);
+        MsfConnector::setIp($ip);
+        MsfConnector::setPort($port);
+        MsfConnector::setWebServerURI($webServerURI);
 
-        if(!isset($_SESSION)) session_start();
-
-        $this->userPassword  = $userPassword;
-        $_SESSION["userPassword"] = $this->userPassword;
-        //$this->ssl = $ssl;
-
-        if($ssl == 'true')  {
+        $this->userPassword = $userPassword;
+        if ($ssl == 'true') {
             $this->ssl = "https://";
-            $_SESSION["ssl"] = $this->ssl;
+
         }
-        if($ssl == 'false') {
+        if ($ssl == 'false') {
             $this->ssl = "http://";
-            $_SESSION["ssl"] = $this->ssl;
+
         }
-
-        //$this->ssl = "https://";
-
         $this->userName = $userName;
-        $_SESSION["userName"] = $this->userName;
         $this->ip = $ip;
-        $_SESSION["ip"] = $this->ip;
         $this->port = $port;
-        $_SESSION["port"] = $this->port;
         $this->webServerURI = $webServerURI;
-        $_SESSION["webServerURI"] = $this->webServerURI;
-        #
     }
-
 
     /**
      * @return string
@@ -70,50 +62,158 @@ class MsfRpcClient
     {
         return $this->userPassword;
     }
-    //TO DO: setter z tokenem
 
-    public function setToken($token){
-        $this->token = $token;
+    /**
+     * @param string $ssl
+     */
+    public function setUserPassword(string $userPassword): void
+    {
+        $this->userPassword = $userPassword;
     }
 
-    public function getToken(){
+    /**
+     * @return string
+     */
+    public function getSsl(): string
+    {
+        return $this->ssl;
+    }
+
+    /**
+     * @param string $ssl
+     */
+    public function setSsl(string $ssl): void
+    {
+        $this->ssl = $ssl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserName(): string
+    {
+        return $this->userName;
+    }
+
+    /**
+     * @param string $userName
+     */
+    /*
+    public function setUserName(string $userName): void
+    {
+        $this->userName = $userName;
+    }
+    */
+    /**
+     * @return string
+     */
+    public function getIp(): int
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param string $ip
+     */
+    public function setIp(string $ip): void
+    {
+        $this->ip = $ip;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPort(): int
+    {
+        return $this->port;
+    }
+
+    /**
+     * @param int $port
+     */
+    public function setPort(int $port): void
+    {
+        $this->port = $port;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebServerURI(): string
+    {
+        return $this->webServerURI;
+    }
+
+    /**
+     * @param string $webServerURI
+     */
+    public function setWebServerURI(string $webServerURI): void
+    {
+        $this->webServerURI = $webServerURI;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
         return $this->token;
     }
 
+    /**
+     * @param string $token
+     */
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
+    }
+
+
+    //TO DO: setter z tokenem
+
+
+    /*
+    public function __set($name, $value) {
+        $this->$connectionData[$userName] = $name;
+    }
+
+    public function __get($name) {
+        if(!array_key_exists($name, $this->connectionData)) {
+            return null;
+        }
+    }
+    public function getData() {
+        return $this->connectionData;
+    }
+    */
+
+
     // ************ curlPost() ************ //
-    public function curlPost($url, $port, $httpheader, $postfields): array {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_PORT , $port);
-        curl_setopt($ch, CURLOPT_VERBOSE, 0);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
 
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_HTTPGET, FALSE);
-        curl_setopt($ch, CURLOPT_NOBODY, FALSE);
+    public function msfAuth()
+    {
+        $data = array("auth.login", $this->userName, $this->userPassword);
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $httpheader);
+        $packer = new Packer();
+        $msgpack_data = $packer->pack($data);
 
-        curl_setopt ($ch, CURLOPT_POSTFIELDS, $postfields);
+        $url = "$this->ssl" . $this->ip . ":$this->port$this->webServerURI";
+        $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
+        $postfields = $msgpack_data;
+        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
 
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30000);    // Timeout
-        //curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0');   // Webbot name
-        curl_setopt($ch, CURLOPT_VERBOSE, FALSE);           // Minimize logs
+        $unpacker = new BufferUnpacker();
+        $unpacker->reset($return_array['FILE']);
+        $msgunpack_data = $unpacker->unpack();
+        $generatedToken = $msgunpack_data["token"];
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);    // No verify certificate added
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);    // No verify certificate
+        //$this->setToken($generateToken);
+        MsfConnector::setToken($generatedToken);
 
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);     // Follow redirects
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 4);             // Limit redirections to four
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);     // Return in string
+        //Generating API Methods from array
+        //$this->createApiMethods();
 
-        $return_array['FILE']   = curl_exec($ch);
-        $return_array['STATUS'] = curl_getinfo($ch);
-        $return_array['ERROR']  = curl_error($ch);
-
-        curl_close($ch);
-
-        return $return_array;
+        return $generatedToken;
     }
     /*
      * $ ./msfrpcd -h
@@ -134,58 +234,52 @@ class MsfRpcClient
      */
 
     // ************  msf_auth() ************ //
-    public function msfAuth() {
-        $data = array("auth.login", $this->userName, $this->userPassword);
 
-        $packer = new Packer();
-        $msgpack_data = $packer->pack($data);
+    public function curlPost($url, $port, $httpheader, $postfields): array
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_PORT, $port);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
 
-        $url = "$this->ssl" . $this->ip .":$this->port$this->webServerURI";
-        $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
-        $postfields = $msgpack_data;
-        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPGET, FALSE);
+        curl_setopt($ch, CURLOPT_NOBODY, FALSE);
 
-        $unpacker = new BufferUnpacker();
-        $unpacker->reset($return_array['FILE']);
-        $msgunpack_data = $unpacker->unpack();
-        $generateToken = $msgunpack_data["token"];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $httpheader);
 
-        $this->setToken($generateToken);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
 
-        //session_start();
-        $_SESSION["token"] = $generateToken;
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30000);    // Timeout
+        //curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0');   // Webbot name
+        curl_setopt($ch, CURLOPT_VERBOSE, FALSE);           // Minimize logs
 
-        //dd($_SESSION["token"]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);    // No verify certificate added
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);    // No verify certificate
 
-        //Generating API Methods from array
-        //$this->createApiMethods();
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);     // Follow redirects
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 4);             // Limit redirections to four
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);     // Return in string
 
-        return $generateToken;
+        $return_array['FILE'] = curl_exec($ch);
+        $return_array['STATUS'] = curl_getinfo($ch);
+        $return_array['ERROR'] = curl_error($ch);
+
+        curl_close($ch);
+
+        return $return_array;
     }
 
     // ************ msf_cmd() ************ //
-    public function msfRequest($client_request) {
-        $packer = new Packer();
-        $msgpack_data = $packer->pack($client_request);
 
-        $url = "$this->ssl" . $this->ip .":$this->port$this->webServerURI";
-        $httpheader = array("Host: RPC Server", "Content-Length: ".strlen($msgpack_data), "Content-Type: binary/message-pack");
-        $postfields = $msgpack_data;
-        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
-
-        $unpacker = new BufferUnpacker();
-        $unpacker->reset($return_array['FILE']);
-        $msgunpack_data = $unpacker->unpack();
-
-        return $msgunpack_data;
-    }
-
-
-    //Genereting methods with
-    public function createApiMethods() {
+    public function createApiMethods()
+    {
 
         //13 metod, które trzeba ręcznie napisać
         //-----------------------Core-----------------------
+
+
         $apiMethods = [
             /*
             //-----------------------Authentication-----------------------
@@ -197,32 +291,32 @@ class MsfRpcClient
             [ "auth.token_remove", "<token>", "<TokenToBeRemoved>"],
             */
             //-----------------------Core-----------------------
-            [ "core.add_module_path", "<token>", "<Path>"],
-            [ "core.module_stats", "<token>"],
-            [ "core.reload_modules", "<token>"],
-            [ "core.save", "<token>" ],
-            [ "core.setg", "<token>", "<OptionName>", "<OptionValue>"],
-            [ "core.unsetg", "<token>", "<OptionName>" ],
-            [ "core.thread_list", "<token>"],
-            [ "core.thread_kill", "<token>", "<ThreadID>"],
-            [ "core.version", "<token>"],
-            [ "core.stop", "<token>"],
+            ["core.add_module_path", "<token>", "<Path>"],
+            ["core.module_stats", "<token>"],
+            ["core.reload_modules", "<token>"],
+            ["core.save", "<token>"],
+            ["core.setg", "<token>", "<OptionName>", "<OptionValue>"],
+            ["core.unsetg", "<token>", "<OptionName>"],
+            ["core.thread_list", "<token>"],
+            ["core.thread_kill", "<token>", "<ThreadID>"],
+            ["core.version", "<token>"],
+            ["core.stop", "<token>"],
 
             //-----------------------Console-----------------------
-            [ "console.create", "<token>"],
-            [ "console.destroy", "<token>", "ConsoleID"],
-            [ "console.list", "<token>"],
+            ["console.create", "<token>"],
+            ["console.destroy", "<token>", "ConsoleID"],
+            ["console.list", "<token>"],
             //[ "console.write", "<token>", "0", "version\n"],
             //[ "console.read", "<token>", "0"],
-            [ "console.session_detach", "<token>", "ConsoleID"],
-            [ "console.session_kill", "<token>", "ConsoleID"],
-            [ "console.tabs", "<token>", "ConsoleID", "InputLine"],
+            ["console.session_detach", "<token>", "ConsoleID"],
+            ["console.session_kill", "<token>", "ConsoleID"],
+            ["console.tabs", "<token>", "ConsoleID", "InputLine"],
 
             //-----------------------Jobs-----------------------
-            [ "job.list", "<token>"],
-            [ "job.info", "<token>", "JobID"],
+            ["job.list", "<token>"],
+            ["job.info", "<token>", "JobID"],
             // nie może być w jednym pliku bo metoda stop juz jest z core grupy metod
-            [ "job.stop", "<token>", "JobID"],
+            ["job.stop", "<token>", "JobID"],
             /*
             //-----------------------Modules-----------------------
             [ "module.exploits", "<token>" ],
@@ -243,24 +337,24 @@ class MsfRpcClient
             */
             //-----------------------Plugins-----------------------
             //[ "plugin.load", "<token>", "PluginName", ["Option1" => "Value1", "Option2" => "Value2"]],
-            [ "plugin.unload", "<token>", "PluginName" ],
-            [ "plugin.loaded", "<token>" ],
+            ["plugin.unload", "<token>", "PluginName"],
+            ["plugin.loaded", "<token>"],
             //-----------------------Sessions-----------------------
-            [ "session.list", "<token>" ],
-            [ "session.stop", "<token>", "SessionID" ],
-            [ "session.shell_read", "<token>", "SessionID", "ReadPointer" ],
+            ["session.list", "<token>"],
+            ["session.stop", "<token>", "SessionID"],
+            ["session.shell_read", "<token>", "SessionID", "ReadPointer"],
             //[ "session.shell_write", "<token>", "SessionID", "id\n" ],
             //[ "session.meterpreter_write", "<token>", "SessionID", "ps" ],
-            [ "session.meterpreter_read", "<token>", "SessionID"],
+            ["session.meterpreter_read", "<token>", "SessionID"],
             //[ "session.meterpreter_run_single", "<token>", "SessionID", "ps" ],
             //["session.meterpreter_script","<token>","SessionID","scriptname"],
-            [ "session.meterpreter_session_detach", "<token>", "SessionID" ],
+            ["session.meterpreter_session_detach", "<token>", "SessionID"],
             //[ "session.meterpreter_session_detach", "<token>", "SessionID" ],
-            [ "session.meterpreter_tabs", "<token>", "SessionID", "InputLine"],
-            [ "session.compatible_modules", "<token>", "SessionID" ],
+            ["session.meterpreter_tabs", "<token>", "SessionID", "InputLine"],
+            ["session.compatible_modules", "<token>", "SessionID"],
             //[ "session.shell_upgrade", "<token>", "SessionID", "1.2.3.4", 4444 ],
-            [ "session.ring_clear", "<token>", "SessionID" ],
-            [ "session.ring_last", "<token>", "SessionID" ],
+            ["session.ring_clear", "<token>", "SessionID"],
+            ["session.ring_last", "<token>", "SessionID"],
             //[ "session.ring_put", "<token>", "SessionID", "id\n" ],
 
         ];
@@ -289,9 +383,9 @@ class MsfRpcClient
             $filesArray[] = strtok($apiMethods[$i][0], '.');
             $filesArray = array_unique($filesArray);
         }
-        //dd($fileArray);
+//dd($fileArray);
 
-        foreach($filesArray as $methodsGroup) {
+        foreach ($filesArray as $methodsGroup) {
 
             $file = new PhpGenerator\PhpFile;
             $file->addComment('This file is auto-generated.');
@@ -305,13 +399,27 @@ class MsfRpcClient
             $class = $namespace->addClass($className);
             $class->setExtends(MsfRpcClient::class);
 
+            $class->addProperty('token')
+                ->setType('string')
+                ->setPrivate();
+
+            $class->addMethod('__construct')
+                ->setBody('parent::__construct
+                (MsfConnector::getUserPassword(),
+                MsfConnector::getSsl(), MsfConnector::getUserName(),
+                MsfConnector::getIp(), MsfConnector::getPort(),
+                MsfConnector::getWebServerURI());
+                $this->token = MsfConnector::getToken();
+                ');
+
+
             // improve generating method' name for method like core.add_module_path
             // generating method name from $apiMethods nested array
             for ($i = 0; $i <= count($apiMethods) - 1; $i++) {
 
                 //generating methods belongs to specific file
                 //dd(strtok($apiMethods[$i][0], '.'), $methodsGroup);
-                if(strtok($apiMethods[$i][0], '.') == $methodsGroup) {
+                if (strtok($apiMethods[$i][0], '.') == $methodsGroup) {
 
                     $substr1 = substr($apiMethods[$i][0], strpos($apiMethods[$i][0], ".") + 1);
                     if (str_contains($substr1, '_'))
@@ -337,6 +445,9 @@ class MsfRpcClient
                     foreach ($apiMethods[$i] as $value) {
                         if (str_contains($value, "<") || str_contains($value, ">")) {
                             $elem = '$' . lcfirst(trim($value, '<>'));
+                            if (str_contains($value, "token")){
+                                $elem = '$this->' . lcfirst(trim($value, '<>'));
+                            }
                             $requestArray[] = $elem;
                         } else {
                             $requestArray[] = '"' . $value . '"';
@@ -354,16 +465,15 @@ class MsfRpcClient
                         ');
 
                     for ($j = 1; $j <= count(current($apiMethods)); $j++) {
-
-                        //dd($apiMethods[$i][$j])
-                        if (isset($apiMethods[$i][$j]))
+                        //dd($apiMethods[$i][$j]);
+                        if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
                             $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
                     }
                 }
 
             }
 
-            if($methodsGroup = "module") {
+            if ($methodsGroup = "module") {
                 //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
                 $method = $class->addMethod('encode')
                     ->setBody('
@@ -386,10 +496,10 @@ class MsfRpcClient
                 //dd($method);
 
                 // "module.target_compatible_payloads", "<token>", "ModuleName", 1 ],
-                 $method = $class->addMethod('targetCompatiblePayloads')
-                     ->setBody('
+                $method = $class->addMethod('targetCompatiblePayloads')
+                    ->setBody('
                         $clientRequest = [$token, $moduleName, $target];'
-                         . "\n" . 'return $this->msfRequest($clientRequest);');
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
                 $method->addParameter("token");
                 $method->addParameter("moduleName");
                 $method->addParameter("target");
@@ -413,6 +523,27 @@ class MsfRpcClient
             //($myfile);
             //return $class;
         }
+    }
+
+
+    //Genereting methods with
+
+    function msf_console($ip, $token, $console_id, $cmd)
+    {
+        $client_request = array("console.write", $token, $console_id, $cmd . "\n");
+        $server_write_response = $this->msfRequest($ip, $client_request);
+        do {
+
+            $client_request = array("console.read", $token, $console_id);
+            $server_read_response = $this->msfRequest($ip, $client_request);
+            //print $server_read_response["data"] . "</br>";
+            //debug('$server_read_response["data"]: ' . $server_read_response["data"] . "</br>");
+            //debug('$server_read_response["prompt"]: ' . $server_read_response["prompt"] . "</br>");
+            //debug('$server_read_response["busy"]: ' . $server_read_response["busy"] . "</br>");
+
+        } while ($server_read_response["busy"] == true);
+
+        return $server_read_response;
     }
 
     /*
@@ -447,25 +578,26 @@ class MsfRpcClient
     */
 
     // ************ msf_console() ************ //
-    function msf_console($ip, $token, $console_id, $cmd)
+
+    public function msfRequest($client_request)
     {
-        $client_request = array("console.write", $token, $console_id, $cmd . "\n");
-        $server_write_response = $this->msfRequest($ip, $client_request);
-        do {
+        $packer = new Packer();
+        $msgpack_data = $packer->pack($client_request);
 
-            $client_request = array("console.read", $token, $console_id);
-            $server_read_response = $this->msfRequest($ip, $client_request);
-            //print $server_read_response["data"] . "</br>";
-            //debug('$server_read_response["data"]: ' . $server_read_response["data"] . "</br>");
-            //debug('$server_read_response["prompt"]: ' . $server_read_response["prompt"] . "</br>");
-            //debug('$server_read_response["busy"]: ' . $server_read_response["busy"] . "</br>");
+        $url = "$this->ssl" . $this->ip . ":$this->port$this->webServerURI";
+        $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
+        $postfields = $msgpack_data;
+        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
 
-        } while($server_read_response["busy"] == true);
+        $unpacker = new BufferUnpacker();
+        $unpacker->reset($return_array['FILE']);
+        $msgunpack_data = $unpacker->unpack();
 
-        return $server_read_response;
+        return $msgunpack_data;
     }
 
     // ************ msf_execute() ************ //
+
     function msf_execute($ip, $token, $cmd)
     {
         $client_request = array("console.write", $token, '0', $cmd . "\n");

@@ -137,6 +137,17 @@ foreach($filesArray as $methodsGroup) {
     $class = $namespace->addClass($className);
     $class->setExtends(MsfRpcClient::class);
 
+    $class->addProperty('token')
+        ->setType('string')
+        ->setPrivate();
+
+    $class->addMethod('__construct')
+        ->setBody('parent::__construct(MsfConnector::getUserPassword(),
+                MsfConnector::getSsl(), MsfConnector::getUserName(),
+                MsfConnector::getIp(), MsfConnector::getPort(),
+                MsfConnector::getWebServerURI());
+                $this->token = MsfConnector::getToken();');
+
     // improve generating method' name for method like core.add_module_path
     // generating method name from $apiMethods nested array
     for ($i = 0; $i <= count($apiMethods) - 1; $i++) {
@@ -169,6 +180,9 @@ foreach($filesArray as $methodsGroup) {
             foreach ($apiMethods[$i] as $value) {
                 if (str_contains($value, "<") || str_contains($value, ">")) {
                     $elem = '$' . lcfirst(trim($value, '<>'));
+                    if (str_contains($value, "token")){
+                        $elem = '$this->' . lcfirst(trim($value, '<>'));
+                    }
                     $requestArray[] = $elem;
                 } else {
                     $requestArray[] = '"' . $value . '"';
@@ -188,7 +202,7 @@ foreach($filesArray as $methodsGroup) {
             for ($j = 1; $j <= count(current($apiMethods)); $j++) {
 
                 //dd($apiMethods[$i][$j])
-                if (isset($apiMethods[$i][$j]))
+                if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
                     $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
             }
         }
