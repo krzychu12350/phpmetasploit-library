@@ -211,7 +211,7 @@ class MsfRpcClient
         MsfConnector::setToken($generatedToken);
 
         //Generating API Methods from array
-        //$this->createApiMethods();
+        $this->createApiMethods();
 
         return $generatedToken;
     }
@@ -281,7 +281,7 @@ class MsfRpcClient
 
 
         $apiMethods = [
-            /*
+
             //-----------------------Authentication-----------------------
             [ "auth.login", "MyUserName", "MyPassword"],
             [ "auth.logout", "<token>", "<LogoutToken>"],
@@ -289,7 +289,7 @@ class MsfRpcClient
             [ "auth.token_generate", "<token>"],
             [ "auth.token_list", "<token>"],
             [ "auth.token_remove", "<token>", "<TokenToBeRemoved>"],
-            */
+
             //-----------------------Core-----------------------
             ["core.add_module_path", "<token>", "<Path>"],
             ["core.module_stats", "<token>"],
@@ -317,7 +317,7 @@ class MsfRpcClient
             ["job.info", "<token>", "JobID"],
             // nie może być w jednym pliku bo metoda stop juz jest z core grupy metod
             ["job.stop", "<token>", "JobID"],
-            /*
+
             //-----------------------Modules-----------------------
             [ "module.exploits", "<token>" ],
             [ "module.auxiliary", "<token>" ],
@@ -334,7 +334,7 @@ class MsfRpcClient
             //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
             // Wyrzuca błąd przy nawiasach klamrowych może byc jedynie zagnieżdzona jeszcze tablica
             //[ "module.execute", "<token>", "ModuleType", "ModuleName", {"LHOST" => "4.3.2.1", "LPORT" => "4444"}],
-            */
+
             //-----------------------Plugins-----------------------
             //[ "plugin.load", "<token>", "PluginName", ["Option1" => "Value1", "Option2" => "Value2"]],
             ["plugin.unload", "<token>", "PluginName"],
@@ -450,11 +450,13 @@ class MsfRpcClient
                             }
                             $requestArray[] = $elem;
                         } else {
-                            $requestArray[] = '"' . $value . '"';
+                            if (str_contains($value, ".")) $requestArray[] = '"' . $value . '"';
+                            else $requestArray[] = "$" . lcfirst($value);
                         }
                     }
 
                     $requestArray = implode(', ', $requestArray);
+                    //dd($requestArray);
 
                     //dd($requestArray);
 
@@ -473,7 +475,21 @@ class MsfRpcClient
 
             }
 
-            if ($methodsGroup = "module") {
+            if ($className == "ConsoleApiMethods") {
+                $method = $class->addMethod('write')
+                    ->setBody('
+                        $clientRequest = ["console.write", $this->token, $consoleId, $content];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("consoleId");
+                $method->addParameter("content");
+
+                $method = $class->addMethod('read')
+                    ->setBody('
+                        $clientRequest = ["console.read", $this->token, $consoleId];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("consoleId");
+            }
+            if ($className == "ModuleApiMethods") {
                 //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
                 $method = $class->addMethod('encode')
                     ->setBody('

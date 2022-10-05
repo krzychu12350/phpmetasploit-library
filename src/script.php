@@ -19,7 +19,7 @@ echo $printer->printFile($file);
 */
 
 $apiMethods = [
-    /*
+
     //-----------------------Authentication-----------------------
     [ "auth.login", "MyUserName", "MyPassword"],
     [ "auth.logout", "<token>", "<LogoutToken>"],
@@ -27,7 +27,7 @@ $apiMethods = [
     [ "auth.token_generate", "<token>"],
     [ "auth.token_list", "<token>"],
     [ "auth.token_remove", "<token>", "<TokenToBeRemoved>"],
-    */
+
     //-----------------------Core-----------------------
     [ "core.add_module_path", "<token>", "<Path>"],
     [ "core.module_stats", "<token>"],
@@ -206,10 +206,10 @@ foreach($filesArray as $methodsGroup) {
                     $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
             }
         }
-
     }
 
     if($methodsGroup = "module") {
+        print_r($methodsGroup);
         //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
         $method = $class->addMethod('encode')
             ->setBody('
@@ -241,6 +241,9 @@ foreach($filesArray as $methodsGroup) {
         $method->addParameter("target");
 
     }
+
+
+
 
     //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
     file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
