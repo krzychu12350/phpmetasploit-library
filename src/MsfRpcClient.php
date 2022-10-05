@@ -6,7 +6,7 @@ use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
 
-require dirname(__DIR__) . '\vendor\autoload.php';
+//require dirname(__DIR__) . '\vendor\autoload.php';
 
 class MsfRpcClient
 {
