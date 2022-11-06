@@ -9,6 +9,7 @@ class Installer
     public static function postUpdate(Event $event)
     {
         $composer = $event->getComposer();
+        echo "Tesssssssstttttttttt";
         // do stuff
     }
 
@@ -25,5 +26,6 @@ class Installer
     public static function warmCache(Event $event)
     {
         // make cache toasty
+        echo "Tesssssssstttttttttt";
     }
 }
