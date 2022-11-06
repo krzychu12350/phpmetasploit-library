@@ -27,7 +27,7 @@
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
             "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "Krzychu12350\\Phpmetasploit\\ComposerScript\\Installer\\": "",
+            "ComposerScript\\Installer\\": "",
             "ComposerPackageUpdater\\composer\\": "./vendor/werbfred/composer-package-updater/src/composer"
         }
     },
