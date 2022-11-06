@@ -24,7 +24,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Krzychu12350\\Phpmetasploit\\": "src"
+            "Krzychu12350\\Phpmetasploit\\": "src",
+            "Goutte\\Client": "vendor/fabpot/goutte/Goutte"
         },
         "psr-0": {
             "Krzychu12350\\Phpmetasploit\\MsfRpcClient" : ""
