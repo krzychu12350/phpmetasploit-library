@@ -273,7 +273,7 @@ class MsfRpcClient
 
     // ************ msf_cmd() ************ //
 
-    public function createApiMethods()
+    public static function createApiMethods()
     {
 
         //13 metod, które trzeba ręcznie napisać
@@ -359,6 +359,10 @@ class MsfRpcClient
 
         ];
 
+
+        $msfPayloadArrayScrapper = new MsfPayloadArrayScrapper();
+        $apiMethods = $msfPayloadArrayScrapper->getArraysPayloadsFromWebsite();
+        //dd($apiMethods);
         //TO DO - Passing arguments to dynamically creating methods
         /*
         $token ='efqeeqe355egeg';
@@ -383,7 +387,8 @@ class MsfRpcClient
             $filesArray[] = strtok($apiMethods[$i][0], '.');
             $filesArray = array_unique($filesArray);
         }
-//dd($fileArray);
+
+        //dd($filesArray);
 
         foreach ($filesArray as $methodsGroup) {
 
@@ -479,6 +484,9 @@ class MsfRpcClient
 
             }
 
+
+
+            /*
             if ($className == "ConsoleApiMethods") {
                 $method = $class->addMethod('write')
                     ->setBody('
@@ -525,6 +533,7 @@ class MsfRpcClient
                 $method->addParameter("target");
 
             }
+            */
 
             //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
             file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
