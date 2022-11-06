@@ -1,0 +1,9 @@
+vendor/
+composer.lock
+src/AuthApiMethods.php
+src/ConsoleApiMethods.php
+src/CoreApiMethods.php
+src/JobApiMethods.php
+src/ModuleApiMethods.php
+src/PluginApiMethods.php
+src/SessionApiMethods.php

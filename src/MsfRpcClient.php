@@ -451,7 +451,11 @@ class MsfRpcClient
                             $requestArray[] = $elem;
                         } else {
                             if (str_contains($value, ".")) $requestArray[] = '"' . $value . '"';
-                            else $requestArray[] = "$" . lcfirst($value);
+                            else {
+                                $requestArray[] = "$" . lcfirst($value);
+                                $method->addComment("@param " . lcfirst($value));
+                            }
+
                         }
                     }
 
