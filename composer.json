@@ -27,7 +27,8 @@
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
             "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "ComposerPackageUpdater\\composer\\": "vendor/werbfred/composer-package-updater/src/composer"
+            "Krzychu12350\\Phpmetasploit\\ComposerScript\\Installer\\": "",
+            "ComposerPackageUpdater\\composer\\": "./vendor/werbfred/composer-package-updater/src/composer"
         }
     },
     "scripts": {
@@ -35,12 +36,12 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "pre-package-install": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
-        "post-package-install": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
-        "pre-package-update": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
-        "post-package-update": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
-        "pre-package-uninstall": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
-        "post-package-uninstall": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent"
+        "post-package-install": [
+            "ComposerScript\\Installer::postPackageUpdate"
+        ],
+        "post-package-update": [
+            "ComposerScript\\Installer::postPackageUpdate"
+        ]
     },
     "extra": {
         "dependency-scripts": {
