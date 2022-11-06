@@ -2,16 +2,20 @@
 
 namespace Krzychu12350\Phpmetasploit;
 use Goutte\Client;
-// dirname(__DIR__) . "./vendor/autoload.php";
+//Laravel Framework
+//require_once dirname(__DIR__) . '\vendor\autoload.php';
 //require dirname(__DIR__) . '../../../autoload.php';
 //require dirname(__DIR__) . "./vendor/autoload.php";
-require dirname(__DIR__) . '../../../autoload.php';
+//require dirname(__DIR__) . '../../../autoload.php';
 //require "vendor/autoload.php";
-
+//require './vendor/autoload.php';
+//Vanilla PHP
+require __DIR__ . '\vendor\autoload.php';
 class MsfPayloadArrayScrapper
 {
     public function getArraysPayloadsFromWebsite(): array
     {
+        //dd(__DIR__ . "\\vendor\\autoload.php");
         $client = new Client();
         $crawler = $client->request('GET',
             'https://docs.rapid7.com/metasploit/standard-api-methods-reference');

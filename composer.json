@@ -17,7 +17,8 @@
         "curl/curl": "^2.3",
         "rybakit/msgpack": "^0.9.1",
         "nette/php-generator": "^4.0",
-        "fabpot/goutte": "v4.0.2"
+        "fabpot/goutte": "v4.0.2",
+        "werbfred/composer-package-updater": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.21"
@@ -25,21 +26,28 @@
     "autoload": {
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
-            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": ""
+            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
+            "ComposerPackageUpdater\\composer\\": "vendor/werbfred/composer-package-updater/src/composer"
         }
     },
     "scripts": {
-            "test": [
-                "@php --version"
-            ],
-        "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-install-cmd": [
-            "@generate-files",
-            "@test"
+        "test": [
+            "@php --version"
         ],
-        "post-update-cmd": [
-            "@generate-files",
-            "@test"
-        ]
+        "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
+        "pre-package-install": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
+        "post-package-install": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
+        "pre-package-update": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
+        "post-package-update": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
+        "pre-package-uninstall": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent",
+        "post-package-uninstall": "ComposerPackageUpdater\\composer\\PackageUpdater::processPackageEvent"
+    },
+    "extra": {
+        "dependency-scripts": {
+            "run": true,
+            "trust": [
+                "generate-files"
+            ]
+        }
     }
 }
