@@ -40,7 +40,7 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-package-install": "ComposerScript\\Installer::postPackageUpdate",
-        "post-package-update": "ComposerScript\\Installer::postPackageUpdate"
+        "post-package-install": "@test",
+        "post-package-update": "@test"
     }
 }
