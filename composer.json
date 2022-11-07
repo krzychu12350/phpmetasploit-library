@@ -37,7 +37,7 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-package-install": ["@generate-files"],
-        "post-package-update": ["@generate-files"]
+        "post-package-install": ["@php --version"],
+        "post-package-update": ["@php --version"]
     }
 }
