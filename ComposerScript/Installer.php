@@ -9,12 +9,10 @@ use ComposerScript\FileGenerator;
 
 class Installer
 {
-    public static function postUpdate(PackageEvent $event)
+    public static function postUpdate(Event $event)
     {
-        $packageName = $event->getOperation()
-            ->getPackage()
-            ->getName();
-        echo $packageName. "Tesssssssstttttttttt";
+        $fileGenerator = new FileGenerator();
+        $fileGenerator->createApiMethods();
         // do stuff
     }
 
