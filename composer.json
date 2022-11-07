@@ -39,8 +39,14 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-root-package-install": "ComposerScript\\Installer::postUpdate",
-        "post-root-package-update": "ComposerScript\\Installer::postUpdate"
+        "post-root-package-install": [
+            "ComposerScript\\Installer::postUpdate",
+            "composer validate"
+        ],
+        "post-root-package-update": [
+            "ComposerScript\\Installer::postUpdate",
+            "composer validate"
+        ]
     },
     "extra": {
         "dependency-scripts": {

@@ -11,8 +11,11 @@ class Installer
 {
     public static function postUpdate(Event $event)
     {
+        $composer = $event->getComposer();
         $fileGenerator = new FileGenerator();
         $fileGenerator->createApiMethods();
+        //var_dump($composer);
+        var_dump("test");
         // do stuff
     }
 
