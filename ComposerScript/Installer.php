@@ -9,14 +9,14 @@ use ComposerScript\FileGenerator;
 
 class Installer
 {
-    public static function postUpdate(PackageEvent $event)
+    public static function postUpdate(Event $event)
     {
         $composer = $event->getComposer();
         echo "Tesssssssstttttttttt";
         // do stuff
     }
 
-    public static function postPackageUpdate(PackageEvent $event)
+    public static function postPackageUpdate(Event $event)
     {
         /*
         $packageName = $event->getOperation()
@@ -31,7 +31,7 @@ class Installer
         // do stuff
     }
 
-    public static function warmCache(PackageEvent $event)
+    public static function warmCache(Event $event)
     {
         // make cache toasty
         echo "Tesssssssstttttttttt";
