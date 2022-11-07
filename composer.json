@@ -17,8 +17,7 @@
         "curl/curl": "^2.3",
         "rybakit/msgpack": "^0.9.1",
         "nette/php-generator": "^4.0",
-        "fabpot/goutte": "v4.0.2",
-        "werbfred/composer-package-updater": "v1.0.2"
+        "fabpot/goutte": "v4.0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.21"
@@ -26,8 +25,7 @@
     "autoload": {
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
-            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "ComposerPackageUpdater\\composer\\": "./vendor/werbfred/composer-package-updater/src/composer"
+            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": ""
         },
         "psr-0": {
             "ComposerScript\\Installer": "",
@@ -39,23 +37,7 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-root-package-install": [
-            "ComposerScript\\Installer::postUpdate",
-            "composer validate"
-        ],
-        "post-root-package-update": [
-            "ComposerScript\\Installer::postUpdate",
-            "composer validate"
-        ]
-    },
-    "extra": {
-        "dependency-scripts": {
-            "run": true,
-            "trust": [
-                "generate-files",
-                "post-package-install",
-                "post-package-update"
-            ]
-        }
+        "post-package-install": ["@generate-files"],
+        "post-package-update": ["@generate-files"]
     }
 }
