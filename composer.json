@@ -40,15 +40,15 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-cmd-install": "ComposerScript\\Installer::postPackageUpdate",
-        "post-cmd-update": "ComposerScript\\Installer::postPackageUpdate"
+        "post-package-install": "ComposerScript\\Installer::postPackageUpdate",
+        "post-package-update": "ComposerScript\\Installer::postPackageUpdate"
     },
     "extra": {
         "scripts-dev": {
-            "post-install-cmd": [
+            "post-package-install": [
                 "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods"
             ],
-            "post-update-cmd": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
+            "post-package-update: "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
             "test": "phpunit"
         }
     },
