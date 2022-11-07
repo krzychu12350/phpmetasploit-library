@@ -25,7 +25,7 @@ class Installer
         echo "$packageName\n";
         */
         $fileGenerator = new FileGenerator();
-
+        $fileGenerator->createApiMethods();
         var_dump(get_class_methods($fileGenerator));
         echo "Tesssssssstttttttttt";
         // do stuff

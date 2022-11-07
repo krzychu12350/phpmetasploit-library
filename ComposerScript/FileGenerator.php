@@ -8,7 +8,7 @@ use Nette\PhpGenerator as PhpGenerator;
 
 class FileGenerator
 {
-    public static function createApiMethods()
+    public function createApiMethods()
     {
 
         //13 metod, które trzeba ręcznie napisać
