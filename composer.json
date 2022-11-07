@@ -30,7 +30,8 @@
             "ComposerPackageUpdater\\composer\\": "./vendor/werbfred/composer-package-updater/src/composer"
         },
         "psr-0": {
-            "ComposerScript\\Installer" : ""
+            "ComposerScript\\Installer" : "",
+            "ComposerScript\\FileGenerator" : ""
         }
     },
     "scripts": {
@@ -38,12 +39,8 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-package-install": [
-            "ComposerScript\\Installer::postPackageUpdate"
-        ],
-        "post-package-update": [
-            "ComposerScript\\Installer::postPackageUpdate"
-        ]
+        "post-package-install": "ComposerScript\\Installer::postPackageUpdate",
+        "post-package-update": "ComposerScript\\Installer::postPackageUpdate"
     },
     "extra": {
         "dependency-scripts": {

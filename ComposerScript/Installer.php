@@ -3,6 +3,9 @@
 namespace ComposerScript;
 
 use Composer\Script\Event;
+use Composer\Installer\PackageEvent;
+
+use ComposerScript\FileGenerator;
 
 class Installer
 {
@@ -15,10 +18,15 @@ class Installer
 
     public static function postPackageUpdate(Event $event)
     {
+        /*
         $packageName = $event->getOperation()
             ->getPackage()
             ->getName();
         echo "$packageName\n";
+        */
+        $fileGenerator = new FileGenerator();
+
+        var_dump(get_class_methods($fileGenerator));
         echo "Tesssssssstttttttttt";
         // do stuff
     }
