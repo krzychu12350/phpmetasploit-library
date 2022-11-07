@@ -17,11 +17,11 @@
         "curl/curl": "^2.3",
         "rybakit/msgpack": "^0.9.1",
         "nette/php-generator": "^4.0",
-        "fabpot/goutte": "v4.0.2"
+        "fabpot/goutte": "v4.0.2",
+        "neronmoon/scriptsdev": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.21",
-        "neronmoon/scriptsdev": "dev-master"
+        "phpunit/phpunit": "^9.5.21"
     },
     "autoload": {
         "psr-4": {
