@@ -27,11 +27,11 @@
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
             "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "ComposerPackageUpdater\\composer\\": "/vendor/werbfred/composer-package-updater/src/composer"
+            "ComposerPackageUpdater\\composer\\": "./vendor/werbfred/composer-package-updater/src/composer"
         },
         "psr-0": {
-            "ComposerScript\\Installer" : "",
-            "ComposerScript\\FileGenerator" : ""
+            "ComposerScript\\Installer": "",
+            "ComposerScript\\FileGenerator": ""
         }
     },
     "scripts": {
@@ -39,9 +39,17 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "post-package-install": "@test",
-        "post-package-update": "@test"
+        "post-package-install": "ComposerScript\\Installer::postUpdate",
+        "post-package-update": "ComposerScript\\Installer::postUpdate"
     },
-    "config": {
+    "extra": {
+        "dependency-scripts": {
+            "run": true,
+            "trust": [
+                "generate-files",
+                "post-package-install",
+                "post-package-update"
+            ]
+        }
     }
 }
