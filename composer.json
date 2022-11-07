@@ -20,7 +20,8 @@
         "fabpot/goutte": "v4.0.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.21"
+        "phpunit/phpunit": "^9.5.21",
+        "neronmoon/scriptsdev": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -32,14 +33,18 @@
             "ComposerScript\\FileGenerator": ""
         }
     },
-    "scripts": {
-        "test": [
-            "@php --version"
-        ],
-        "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "pre-install-cmd": ["@php --version"],
-        "pre-update-cmd": ["@php --version"],
-        "post-install-cmd": ["@php --version"],
-        "post-update-cmd": ["@php --version"]
+    "extra": {
+        "scripts-dev": {
+            "post-install-cmd": [
+                "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods"
+            ],
+            "post-update-cmd": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
+            "test": "phpunit"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "neronmoon/scriptsdev": true
+        }
     }
 }
