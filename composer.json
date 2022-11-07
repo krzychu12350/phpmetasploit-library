@@ -28,7 +28,7 @@
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
             "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "ComposerPackageUpdater\\composer\\": "./vendor/werbfred/composer-package-updater/src/composer"
+            "ComposerPackageUpdater\\composer\\": "/vendor/werbfred/composer-package-updater/src/composer"
         },
         "psr-0": {
             "ComposerScript\\Installer" : "",
@@ -42,19 +42,5 @@
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
         "post-package-install": "ComposerScript\\Installer::postPackageUpdate",
         "post-package-update": "ComposerScript\\Installer::postPackageUpdate"
-    },
-    "extra": {
-        "scripts-dev": {
-            "post-package-install": [
-                "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods"
-            ],
-            "post-package-update: "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-            "test": "phpunit"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "neronmoon/scriptsdev": true
-        }
     }
 }
