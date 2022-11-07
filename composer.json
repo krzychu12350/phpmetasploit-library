@@ -37,7 +37,9 @@
             "@php --version"
         ],
         "generate-files": "Krzychu12350\\Phpmetasploit\\MsfRpcClient::createApiMethods",
-        "pre-package-install": ["@php --version"],
-        "pre-package-update": ["@php --version"]
+        "pre-install-cmd": ["@php --version"],
+        "pre-update-cmd": ["@php --version"],
+        "post-install-cmd": ["@php --version"],
+        "post-update-cmd": ["@php --version"]
     }
 }
