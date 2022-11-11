@@ -294,7 +294,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
             }
 
             //file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
-            file_put_contents(dirname(__FILE__) . $className . '.php', $file);
+            file_put_contents(dirname(__FILE__) . '\\'. $className . '.php', $file);
 
         }
     }
