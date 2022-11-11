@@ -23,7 +23,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         $this->composer = $composer;
         $this->io = $io;
         //var_dump("dddddddddddddddddddd");
-        if (!file_exists('methods'))
+        if (!is_dir('methods'))
             mkdir(dirname(__FILE__) . '\\methods', 0777, true);
     }
 
@@ -202,7 +202,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
             $file->addComment('This file is auto-generated.');
             $file->setStrictTypes(); // adds declare(strict_types=1)
 
-            $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit');
+            $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit\Methods');
 
             //$methodsGroup = ucwords('core');
             $className = ucwords($methodsGroup) . 'ApiMethods';
