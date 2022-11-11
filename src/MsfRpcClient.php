@@ -398,7 +398,7 @@ class MsfRpcClient
             $file->addComment('This file is auto-generated.');
             $file->setStrictTypes(); // adds declare(strict_types=1)
 
-            $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit');
+            $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit\Methods');
 
             //$methodsGroup = ucwords('core');
             $className = ucwords($methodsGroup) . 'ApiMethods';
