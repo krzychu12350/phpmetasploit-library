@@ -23,7 +23,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         $this->composer = $composer;
         $this->io = $io;
         //var_dump("dddddddddddddddddddd");
-        if (!is_dir('methods'))
+        if (!file_exists(dirname(__FILE__) . '\\methods'))
             mkdir(dirname(__FILE__) . '\\methods', 0777, true);
     }
 
