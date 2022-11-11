@@ -44,9 +44,12 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
 
     public function onPostPackageInstall(\Composer\Installer\PackageEvent $event)
     {
-        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
+
+        //$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
 
         /** @var InstallOperation $item */
+        $this->createApiMethods();
+        /*
         foreach ($event->getOperations() as $item) {
 
             $packageInstalled = $item->getPackage()->getName();
@@ -56,6 +59,7 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
             echo $vendorDir . $packageInstalled . '/composer.json';
 
         }
+        */
 
     }
 
