@@ -20,7 +20,7 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
         $this->composer = $composer;
         $this->io = $io;
         //var_dump("dddddddddddddddddddd");
-        $this->createApiMethods();
+
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
@@ -37,7 +37,7 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
         return array(
 
             PluginEvents::POST_FILE_DOWNLOAD => array(
-                array('createApiMethods', 0)
+                array('createApiMethods', 1)
             ),
 
             //'post-autoload-dump' => 'Krzychu12350\Phpmetasploit\MsfRpcClient::createApiMethods',
