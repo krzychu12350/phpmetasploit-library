@@ -19,7 +19,8 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
     {
         $this->composer = $composer;
         $this->io = $io;
-        var_dump("dddddddddddddddddddd");
+        //var_dump("dddddddddddddddddddd");
+        $this->createApiMethods();
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
@@ -51,7 +52,7 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
             // ...
         }
         */
-        var_dump("testtttttttttttttt");
+        //var_dump("testtttttttttttttt");
 
     }
 
