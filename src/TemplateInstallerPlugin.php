@@ -33,16 +33,16 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
     public static function getSubscribedEvents()
     {
         return array(
-            /*
+
             PluginEvents::PRE_FILE_DOWNLOAD => array(
-                array('onPreFileDownload', 0)
+                array('autoGenerateFiles', 0)
             ),
-            */
-            'post-autoload-dump' => 'Krzychu12350\Phpmetasploit\MsfRpcClient::createApiMethods',
+
+            //'post-autoload-dump' => 'Krzychu12350\Phpmetasploit\MsfRpcClient::createApiMethods',
         );
     }
 
-    public function onPreFileDownload(PreFileDownloadEvent $event)
+    public function autoGenerateFiles(PreFileDownloadEvent $event)
     {
         $protocol = parse_url($event->getProcessedUrl(), PHP_URL_SCHEME);
         /*
@@ -50,5 +50,7 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
             // ...
         }
         */
+        var_dump("testtttttttttttttt");
+
     }
 }
