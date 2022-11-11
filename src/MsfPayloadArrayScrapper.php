@@ -10,7 +10,7 @@ use Goutte\Client;
 //require "vendor/autoload.php";
 //require './vendor/autoload.php';
 //Vanilla PHP
-require dirname(__DIR__) . '../../../autoload.php';
+//require dirname(__DIR__) . '../../../autoload.php';
 class MsfPayloadArrayScrapper
 {
     public function getArraysPayloadsFromWebsite(): array
