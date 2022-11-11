@@ -36,6 +36,6 @@
         }
     },
     "extra": {
-        "class": "TemplateInstallerPlugin"
+        "class": "Krzychu12350\\Phpmetasploit"
     }
 }
