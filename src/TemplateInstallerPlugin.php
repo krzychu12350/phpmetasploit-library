@@ -7,6 +7,7 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Plugin\PluginEvents;
+use Composer\Plugin\PostFileDownloadEvent;
 use Composer\Plugin\PreFileDownloadEvent;
 use Nette\PhpGenerator as PhpGenerator;
 
@@ -37,22 +38,22 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
         return array(
 
             PluginEvents::POST_FILE_DOWNLOAD => array(
-                array('createApiMethods', 1)
+                array('autoGenerateFiles', 1)
             ),
 
             //'post-autoload-dump' => 'Krzychu12350\Phpmetasploit\MsfRpcClient::createApiMethods',
         );
     }
 
-    public function autoGenerateFiles(PreFileDownloadEvent $event)
+    public function autoGenerateFiles(PostFileDownloadEvent $event)
     {
-        $protocol = parse_url($event->getProcessedUrl(), PHP_URL_SCHEME);
+        $protocol = parse_url($event->getName(), PHP_URL_SCHEME);
         /*
         if ($protocol === 's3') {
             // ...
         }
         */
-        //var_dump("testtttttttttttttt");
+        var_dump($event->getName());
 
     }
 

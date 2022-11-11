@@ -3,7 +3,7 @@
 namespace Krzychu12350\Phpmetasploit;
 use Goutte\Client;
 //Laravel Framework
-require_once dirname(__DIR__) . '\vendor\autoload.php';
+require_once '\vendor\autoload.php';
 //require dirname(__DIR__) . '../../../autoload.php';
 //require dirname(__DIR__) . "./vendor/autoload.php";
 //require dirname(__DIR__) . '../../../autoload.php';
