@@ -1,6 +1,6 @@
 {
     "name": "krzychu12350/phpmetasploit",
-    "description": "This library allow to interact with Metasploit either through msfrpcd or the msgrpc plugin in msfconsole.",
+    "description": "This composer plugin allow to interact with Metasploit either through msfrpcd or the msgrpc plugin in msfconsole.",
     "type": "composer-plugin",
     "license": "MIT",
     "authors": [
