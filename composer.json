@@ -10,6 +10,20 @@
         }
     ],
     "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Krzychu12350\\Phpmetasploit\\": "src",
+            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
+            "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin\\": ""
+        },
+        "psr-0": {
+            "ComposerScript\\Installer": "",
+            "ComposerScript\\FileGenerator": ""
+        }
+    },
+    "extra": {
+        "class": "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin"
+    },
     "require": {
         "php": ">=8.1.2",
         "ext-curl": "*",
@@ -23,19 +37,5 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5.21",
         "composer/composer": "^2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Krzychu12350\\Phpmetasploit\\": "src",
-            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin\\": ""
-        },
-        "psr-0": {
-            "ComposerScript\\Installer": "",
-            "ComposerScript\\FileGenerator": ""
-        }
-    },
-    "extra": {
-        "class": "Krzychu12350\\Phpmetasploit"
     }
 }
