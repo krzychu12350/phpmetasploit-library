@@ -3,6 +3,7 @@
 namespace Krzychu12350\Phpmetasploit;
 
 use Composer\Composer;
+use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
@@ -35,14 +36,27 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
 
     public static function getSubscribedEvents()
     {
-        return array(
-
-            PluginEvents::POST_FILE_DOWNLOAD => array(
-                array('autoGenerateFiles', 1)
-            ),
-
+        return [
+            'post-package-install' => 'onPostPackageInstall'
             //'post-autoload-dump' => 'Krzychu12350\Phpmetasploit\MsfRpcClient::createApiMethods',
-        );
+        ];
+    }
+
+    public function onPostPackageInstall(\Composer\Installer\PackageEvent $event)
+    {
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
+
+        /** @var InstallOperation $item */
+        foreach ($event->getOperations() as $item) {
+
+            $packageInstalled = $item->getPackage()->getName();
+            // do any thing with the package name like `laravel/laravel`
+            //You can now edit the composer.json file
+
+            echo $vendorDir . $packageInstalled . '/composer.json';
+
+        }
+
     }
 
     public function autoGenerateFiles(PostFileDownloadEvent $event)
