@@ -13,12 +13,7 @@
     "autoload": {
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
-            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
-            "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin\\": ""
-        },
-        "psr-0": {
-            "ComposerScript\\Installer": "",
-            "ComposerScript\\FileGenerator": ""
+            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": ""
         }
     },
     "extra": {
