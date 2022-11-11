@@ -36,7 +36,7 @@ class TemplateInstallerPlugin implements PluginInterface, EventSubscriberInterfa
     {
         return array(
 
-            PluginEvents::PRE_FILE_DOWNLOAD => array(
+            PluginEvents::POST_FILE_DOWNLOAD => array(
                 array('createApiMethods', 0)
             ),
 
