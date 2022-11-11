@@ -203,6 +203,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
             $file->setStrictTypes(); // adds declare(strict_types=1)
 
             $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit\Methods');
+            $namespace->addUse('Krzychu12350\Phpmetasploit\MsfConnector');
 
             //$methodsGroup = ucwords('core');
             $className = ucwords($methodsGroup) . 'ApiMethods';
