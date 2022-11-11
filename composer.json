@@ -22,7 +22,7 @@
         }
     },
     "extra": {
-        "class": "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin"
+        "class": "Krzychu12350\\Phpmetasploit\\PluginInstaller"
     },
     "require": {
         "php": ">=8.1.2",
