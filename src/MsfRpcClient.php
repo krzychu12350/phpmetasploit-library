@@ -398,7 +398,7 @@ class MsfRpcClient
             $file->addComment('This file is auto-generated.');
             $file->setStrictTypes(); // adds declare(strict_types=1)
 
-            $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit\Methods');
+            $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit');
 
             //$methodsGroup = ucwords('core');
             $className = ucwords($methodsGroup) . 'ApiMethods';
@@ -538,7 +538,7 @@ class MsfRpcClient
             */
 
             //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
-            file_put_contents(dirname(__FILE__) . '\\methods\\' . $className . '.php', $file);
+            file_put_contents(dirname(__FILE__) . $className . '.php', $file);
 
             //dd(dirname(__FILE__));
 
