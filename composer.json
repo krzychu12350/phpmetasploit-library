@@ -28,7 +28,8 @@
     "autoload": {
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
-            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": ""
+            "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
+            "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin\\": ""
         },
         "psr-0": {
             "ComposerScript\\Installer": "",
@@ -36,7 +37,7 @@
         }
     },
     "extra": {
-        "class": "src\\TemplateInstallerPlugin"
+        "class": "TemplateInstallerPlugin"
     },
     "config": {
         "allow-plugins": {
