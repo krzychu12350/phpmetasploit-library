@@ -36,11 +36,6 @@
         }
     },
     "extra": {
-        "class": "Krzychu12350\\Phpmetasploit\\TemplateInstallerPlugin\\"
-    },
-    "config": {
-        "allow-plugins": {
-            "neronmoon/scriptsdev": true
-        }
+        "class": "TemplateInstallerPlugin"
     }
 }
