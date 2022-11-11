@@ -5,6 +5,7 @@ namespace Krzychu12350\Phpmetasploit;
 use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
+use function PHPUnit\Framework\directoryExists;
 
 //require dirname(__DIR__) . '\vendor\autoload.php';
 
@@ -275,7 +276,8 @@ class MsfRpcClient
 
     public static function createApiMethods()
     {
-
+        //if (!directoryExists('methods'))
+        //    mkdir(dirname(__FILE__) . 'methods', 0777, true);
         //13 metod, które trzeba ręcznie napisać
         //-----------------------Core-----------------------
 
@@ -536,7 +538,7 @@ class MsfRpcClient
             */
 
             //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
-            file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
+            file_put_contents(dirname(__FILE__) . '\\methods\\' . $className . '.php', $file);
 
             //dd(dirname(__FILE__));
 

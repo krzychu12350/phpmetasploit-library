@@ -23,7 +23,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         $this->composer = $composer;
         $this->io = $io;
         //var_dump("dddddddddddddddddddd");
-
+        mkdir(dirname(__FILE__) . '\\methods', 0777, true);
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
@@ -45,7 +45,6 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     public function onPostPackageInstallOrUpdate(PackageEvent $event)
     {
-
         //$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
 
         /** @var InstallOperation $item */
@@ -80,6 +79,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     public function createApiMethods()
     {
+
 
         //13 metod, które trzeba ręcznie napisać
         //-----------------------Core-----------------------
@@ -289,7 +289,8 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
             }
 
-            file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
+            //file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
+            file_put_contents(dirname(__FILE__) . '\\methods\\' . $className . '.php', $file);
 
         }
     }
