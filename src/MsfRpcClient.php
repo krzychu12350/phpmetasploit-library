@@ -212,7 +212,7 @@ class MsfRpcClient
         MsfConnector::setToken($generatedToken);
 
         //Generating API Methods from array
-        $this->createApiMethods();
+        //$this->createApiMethods();
 
         return $generatedToken;
     }
@@ -538,7 +538,7 @@ class MsfRpcClient
             */
 
             //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
-            file_put_contents(dirname(__FILE__) . $className . '.php', $file);
+            file_put_contents(dirname(__FILE__) . '\\'. $className . '.php', $file);
 
             //dd(dirname(__FILE__));
 
