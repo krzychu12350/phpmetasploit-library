@@ -610,7 +610,7 @@ class MsfRpcClient
 
     // ************ msf_console() ************ //
 
-    private function msfRequest($client_request)
+    protected function msfRequest($client_request)
     {
         $packer = new Packer();
         $msgpack_data = $packer->pack($client_request);
