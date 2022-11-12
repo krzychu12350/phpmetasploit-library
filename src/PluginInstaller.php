@@ -46,7 +46,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         ];
     }
 
-    private function onPostPackageInstallOrUpdate(PackageEvent $event)
+    public function onPostPackageInstallOrUpdate(PackageEvent $event)
     {
         //$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
 
