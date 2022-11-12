@@ -46,7 +46,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         ];
     }
 
-    public function onPostPackageInstallOrUpdate(PackageEvent $event)
+    private function onPostPackageInstallOrUpdate(PackageEvent $event)
     {
         //$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
 
@@ -66,7 +66,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     }
 
-    public function autoGenerateFiles(PostFileDownloadEvent $event)
+    private function autoGenerateFiles(PostFileDownloadEvent $event)
     {
         $protocol = parse_url($event->getName(), PHP_URL_SCHEME);
         /*
@@ -80,7 +80,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     // ************ msf_cmd() ************ //
 
-    public function createApiMethods()
+    private function createApiMethods()
     {
 
 

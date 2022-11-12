@@ -32,7 +32,7 @@ class MsfRpcClient
     private string $userPassword;
     private string $token;
 
-    function __construct($userPassword,$ssl,$userName,$ip,$port, $webServerURI)
+    public function __construct($userPassword,$ssl,$userName,$ip,$port, $webServerURI)
     {
         MsfConnector::setUserPassword($userPassword);
         MsfConnector::setSsl($ssl);
@@ -59,7 +59,7 @@ class MsfRpcClient
     /**
      * @return string
      */
-    public function getUserPassword(): string
+    private function getUserPassword(): string
     {
         return $this->userPassword;
     }
@@ -67,7 +67,7 @@ class MsfRpcClient
     /**
      * @param string $ssl
      */
-    public function setUserPassword(string $userPassword): void
+    private function setUserPassword(string $userPassword): void
     {
         $this->userPassword = $userPassword;
     }
@@ -75,7 +75,7 @@ class MsfRpcClient
     /**
      * @return string
      */
-    public function getSsl(): string
+    private function getSsl(): string
     {
         return $this->ssl;
     }
@@ -83,7 +83,7 @@ class MsfRpcClient
     /**
      * @param string $ssl
      */
-    public function setSsl(string $ssl): void
+    private function setSsl(string $ssl): void
     {
         $this->ssl = $ssl;
     }
@@ -91,7 +91,7 @@ class MsfRpcClient
     /**
      * @return string
      */
-    public function getUserName(): string
+    private function getUserName(): string
     {
         return $this->userName;
     }
@@ -100,7 +100,7 @@ class MsfRpcClient
      * @param string $userName
      */
     /*
-    public function setUserName(string $userName): void
+    private function setUserName(string $userName): void
     {
         $this->userName = $userName;
     }
@@ -108,7 +108,7 @@ class MsfRpcClient
     /**
      * @return string
      */
-    public function getIp(): int
+    private function getIp(): int
     {
         return $this->ip;
     }
@@ -116,7 +116,7 @@ class MsfRpcClient
     /**
      * @param string $ip
      */
-    public function setIp(string $ip): void
+    private function setIp(string $ip): void
     {
         $this->ip = $ip;
     }
@@ -124,7 +124,7 @@ class MsfRpcClient
     /**
      * @return int
      */
-    public function getPort(): int
+    private function getPort(): int
     {
         return $this->port;
     }
@@ -132,7 +132,7 @@ class MsfRpcClient
     /**
      * @param int $port
      */
-    public function setPort(int $port): void
+    private function setPort(int $port): void
     {
         $this->port = $port;
     }
@@ -140,7 +140,7 @@ class MsfRpcClient
     /**
      * @return string
      */
-    public function getWebServerURI(): string
+    private function getWebServerURI(): string
     {
         return $this->webServerURI;
     }
@@ -148,7 +148,7 @@ class MsfRpcClient
     /**
      * @param string $webServerURI
      */
-    public function setWebServerURI(string $webServerURI): void
+    private function setWebServerURI(string $webServerURI): void
     {
         $this->webServerURI = $webServerURI;
     }
@@ -156,7 +156,7 @@ class MsfRpcClient
     /**
      * @return string
      */
-    public function getToken(): string
+    private function getToken(): string
     {
         return $this->token;
     }
@@ -164,7 +164,7 @@ class MsfRpcClient
     /**
      * @param string $token
      */
-    public function setToken(string $token): void
+    private function setToken(string $token): void
     {
         $this->token = $token;
     }
@@ -236,7 +236,7 @@ class MsfRpcClient
 
     // ************  msf_auth() ************ //
 
-    public function curlPost($url, $port, $httpheader, $postfields): array
+    private function curlPost($url, $port, $httpheader, $postfields): array
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -274,7 +274,7 @@ class MsfRpcClient
 
     // ************ msf_cmd() ************ //
 
-    public static function createApiMethods()
+    private static function createApiMethods()
     {
         //if (!directoryExists('methods'))
         //    mkdir(dirname(__FILE__) . 'methods', 0777, true);
@@ -610,7 +610,7 @@ class MsfRpcClient
 
     // ************ msf_console() ************ //
 
-    public function msfRequest($client_request)
+    private function msfRequest($client_request)
     {
         $packer = new Packer();
         $msgpack_data = $packer->pack($client_request);
