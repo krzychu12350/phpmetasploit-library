@@ -24,22 +24,25 @@ class MsfRpcClient
      * to co jest wspolne do klasy abstrackja klasy abstrakcyjnej np. MsfRpcClient i kolejna Connection
      * w konstrukturze klsay MsfRpcClient 'wpinam' obiekt klasy Connection
      */
+    public string $userPassword;
     private string $ssl;
     private string $userName;
     private string $ip;
     private int $port;
     private string $webServerURI;
-    private string $userPassword;
-    private string $token;
+    protected string $token;
 
-    public function __construct($userPassword,$ssl,$userName,$ip,$port, $webServerURI)
+    public function __construct($userPassword, $ssl, $userName, $ip, $port, $webServerURI)
     {
+        //$this->setUserPassword($userPassword);
+
         MsfConnector::setUserPassword($userPassword);
         MsfConnector::setSsl($ssl);
         MsfConnector::setUserName($userName);
         MsfConnector::setIp($ip);
         MsfConnector::setPort($port);
         MsfConnector::setWebServerURI($webServerURI);
+        //MsfConnector::setToken($token);
 
         $this->userPassword = $userPassword;
         if ($ssl == 'true') {
@@ -54,142 +57,8 @@ class MsfRpcClient
         $this->ip = $ip;
         $this->port = $port;
         $this->webServerURI = $webServerURI;
+        //$this->token = $token;
     }
-
-    /**
-     * @return string
-     */
-    private function getUserPassword(): string
-    {
-        return $this->userPassword;
-    }
-
-    /**
-     * @param string $ssl
-     */
-    private function setUserPassword(string $userPassword): void
-    {
-        $this->userPassword = $userPassword;
-    }
-
-    /**
-     * @return string
-     */
-    private function getSsl(): string
-    {
-        return $this->ssl;
-    }
-
-    /**
-     * @param string $ssl
-     */
-    private function setSsl(string $ssl): void
-    {
-        $this->ssl = $ssl;
-    }
-
-    /**
-     * @return string
-     */
-    private function getUserName(): string
-    {
-        return $this->userName;
-    }
-
-    /**
-     * @param string $userName
-     */
-    /*
-    private function setUserName(string $userName): void
-    {
-        $this->userName = $userName;
-    }
-    */
-    /**
-     * @return string
-     */
-    private function getIp(): int
-    {
-        return $this->ip;
-    }
-
-    /**
-     * @param string $ip
-     */
-    private function setIp(string $ip): void
-    {
-        $this->ip = $ip;
-    }
-
-    /**
-     * @return int
-     */
-    private function getPort(): int
-    {
-        return $this->port;
-    }
-
-    /**
-     * @param int $port
-     */
-    private function setPort(int $port): void
-    {
-        $this->port = $port;
-    }
-
-    /**
-     * @return string
-     */
-    private function getWebServerURI(): string
-    {
-        return $this->webServerURI;
-    }
-
-    /**
-     * @param string $webServerURI
-     */
-    private function setWebServerURI(string $webServerURI): void
-    {
-        $this->webServerURI = $webServerURI;
-    }
-
-    /**
-     * @return string
-     */
-    private function getToken(): string
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param string $token
-     */
-    private function setToken(string $token): void
-    {
-        $this->token = $token;
-    }
-
-
-    //TO DO: setter z tokenem
-
-
-    /*
-    public function __set($name, $value) {
-        $this->$connectionData[$userName] = $name;
-    }
-
-    public function __get($name) {
-        if(!array_key_exists($name, $this->connectionData)) {
-            return null;
-        }
-    }
-    public function getData() {
-        return $this->connectionData;
-    }
-    */
-
-
-    // ************ curlPost() ************ //
 
     public function msfAuth()
     {
@@ -208,7 +77,7 @@ class MsfRpcClient
         $msgunpack_data = $unpacker->unpack();
         $generatedToken = $msgunpack_data["token"];
 
-        //$this->setToken($generateToken);
+        //$this->setToken($generatedToken);
         MsfConnector::setToken($generatedToken);
 
         //Generating API Methods from array
@@ -216,25 +85,6 @@ class MsfRpcClient
 
         return $generatedToken;
     }
-    /*
-     * $ ./msfrpcd -h
-
-   Usage: msfrpcd <options>
-
-   OPTIONS:
-
-       -P <opt>  Specify the password to access msfrpcd
-       -S        Disable SSL on the RPC socket
-       -U <opt>  Specify the username to access msfrpcd
-       -a <opt>  Bind to this IP address
-       -f        Run the daemon in the foreground
-       -h        Help banner
-       -n        Disable database
-       -p <opt>  Bind to this port instead of 55553
-       -u <opt>  URI for Web server
-     */
-
-    // ************  msf_auth() ************ //
 
     private function curlPost($url, $port, $httpheader, $postfields): array
     {
@@ -272,9 +122,7 @@ class MsfRpcClient
         return $return_array;
     }
 
-    // ************ msf_cmd() ************ //
-
-    private static function createApiMethods()
+    public static function createApiMethods()
     {
         //if (!directoryExists('methods'))
         //    mkdir(dirname(__FILE__) . 'methods', 0777, true);
@@ -285,12 +133,12 @@ class MsfRpcClient
         $apiMethods = [
 
             //-----------------------Authentication-----------------------
-            [ "auth.login", "MyUserName", "MyPassword"],
-            [ "auth.logout", "<token>", "<LogoutToken>"],
-            [ "auth.token_add", "<token>", "<NewToken>"],
-            [ "auth.token_generate", "<token>"],
-            [ "auth.token_list", "<token>"],
-            [ "auth.token_remove", "<token>", "<TokenToBeRemoved>"],
+            ["auth.login", "MyUserName", "MyPassword"],
+            ["auth.logout", "<token>", "<LogoutToken>"],
+            ["auth.token_add", "<token>", "<NewToken>"],
+            ["auth.token_generate", "<token>"],
+            ["auth.token_list", "<token>"],
+            ["auth.token_remove", "<token>", "<TokenToBeRemoved>"],
 
             //-----------------------Core-----------------------
             ["core.add_module_path", "<token>", "<Path>"],
@@ -321,17 +169,17 @@ class MsfRpcClient
             ["job.stop", "<token>", "JobID"],
 
             //-----------------------Modules-----------------------
-            [ "module.exploits", "<token>" ],
-            [ "module.auxiliary", "<token>" ],
-            [ "module.post", "<token>" ],
-            [ "module.payloads", "<token>" ],
-            [ "module.encoders", "<token>" ],
-            [ "module.nops", "<token>" ],
-            [ "module.info", "<token>", "ModuleType", "ModuleName" ],
-            [ "module.options", "<token>", "ModuleType", "ModuleName" ],
-            [ "module.compatible_payloads", "<token>", "ModuleName" ],
+            ["module.exploits", "<token>"],
+            ["module.auxiliary", "<token>"],
+            ["module.post", "<token>"],
+            ["module.payloads", "<token>"],
+            ["module.encoders", "<token>"],
+            ["module.nops", "<token>"],
+            ["module.info", "<token>", "ModuleType", "ModuleName"],
+            ["module.options", "<token>", "ModuleType", "ModuleName"],
+            ["module.compatible_payloads", "<token>", "ModuleName"],
             //[ "module.target_compatible_payloads", "<token>", "ModuleName", 1 ],
-            [ "module.compatible_sessions", "<token>", "ModuleName" ],
+            ["module.compatible_sessions", "<token>", "ModuleName"],
             //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
             //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
             // Wyrzuca błąd przy nawiasach klamrowych może byc jedynie zagnieżdzona jeszcze tablica
@@ -406,17 +254,18 @@ class MsfRpcClient
             $class = $namespace->addClass($className);
             $class->setExtends(MsfRpcClient::class);
 
-            $class->addProperty('token')
-                ->setType('string')
-                ->setPrivate();
-
+            /*
+             $class->addProperty('token')
+                 ->setType('string')
+                 ->setPrivate();
+             */
             $class->addMethod('__construct')
                 ->setBody('parent::__construct
                 (MsfConnector::getUserPassword(),
                 MsfConnector::getSsl(), MsfConnector::getUserName(),
                 MsfConnector::getIp(), MsfConnector::getPort(),
                 MsfConnector::getWebServerURI());
-                $this->token = MsfConnector::getToken();
+                //$this->token = MsfConnector::getToken();
                 ');
 
 
@@ -452,7 +301,7 @@ class MsfRpcClient
                     foreach ($apiMethods[$i] as $value) {
                         if (str_contains($value, "<") || str_contains($value, ">")) {
                             $elem = '$' . lcfirst(trim($value, '<>'));
-                            if (str_contains($value, "token")){
+                            if (str_contains($value, "token")) {
                                 $elem = '$this->' . lcfirst(trim($value, '<>'));
                             }
                             $requestArray[] = $elem;
@@ -477,6 +326,7 @@ class MsfRpcClient
                         $clientRequest = [' . $requestArray . '];' . "\n" . 'return $this->msfRequest($clientRequest);
                         ');
 
+                    //dd($apiMethods);
                     for ($j = 1; $j <= count(current($apiMethods)); $j++) {
                         //dd($apiMethods[$i][$j]);
                         if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
@@ -485,7 +335,6 @@ class MsfRpcClient
                 }
 
             }
-
 
 
             /*
@@ -538,7 +387,7 @@ class MsfRpcClient
             */
 
             //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
-            file_put_contents(dirname(__FILE__) . '\\'. $className . '.php', $file);
+            file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
 
             //dd(dirname(__FILE__));
 
@@ -556,9 +405,6 @@ class MsfRpcClient
         }
     }
 
-
-    //Genereting methods with
-
     function msf_console($ip, $token, $console_id, $cmd)
     {
         $client_request = array("console.write", $token, $console_id, $cmd . "\n");
@@ -575,6 +421,174 @@ class MsfRpcClient
         } while ($server_read_response["busy"] == true);
 
         return $server_read_response;
+    }
+
+    public function msfRequest($client_request)
+    {
+        $packer = new Packer();
+        $msgpack_data = $packer->pack($client_request);
+
+        $url = "$this->ssl" . $this->ip . ":$this->port$this->webServerURI";
+        $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
+        $postfields = $msgpack_data;
+        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
+
+        $unpacker = new BufferUnpacker();
+        $unpacker->reset($return_array['FILE']);
+        $msgunpack_data = $unpacker->unpack();
+
+        return $msgunpack_data;
+    }
+
+    /**
+     * @param string $userName
+     */
+    /*
+    private function setUserName(string $userName): void
+    {
+        $this->userName = $userName;
+    }
+    */
+
+    function msf_execute($ip, $token, $cmd)
+    {
+        $client_request = array("console.write", $token, '0', $cmd . "\n");
+        $server_write_response = $this->msfRequest($client_request);
+        return $server_write_response;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUserPassword(): string
+    {
+        return $this->userPassword;
+    }
+
+    /**
+     * @param string $ssl
+     */
+    private function setUserPassword(string $userPassword): void
+    {
+        $this->userPassword = $userPassword;
+    }
+
+    /**
+     * @return string
+     */
+    private function getSsl(): string
+    {
+        return $this->ssl;
+    }
+
+    /**
+     * @param string $ssl
+     */
+    private function setSsl(string $ssl): void
+    {
+        $this->ssl = $ssl;
+    }
+
+    /**
+     * @return string
+     */
+    private function getUserName(): string
+    {
+        return $this->userName;
+    }
+
+    /**
+     * @return string
+     */
+    private function getIp(): int
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param string $ip
+     */
+    private function setIp(string $ip): void
+    {
+        $this->ip = $ip;
+    }
+
+
+    //TO DO: setter z tokenem
+
+
+    /*
+    public function __set($name, $value) {
+        $this->$connectionData[$userName] = $name;
+    }
+
+    public function __get($name) {
+        if(!array_key_exists($name, $this->connectionData)) {
+            return null;
+        }
+    }
+    public function getData() {
+        return $this->connectionData;
+    }
+    */
+
+
+    // ************ curlPost() ************ //
+
+    /**
+     * @return int
+     */
+    private function getPort(): int
+    {
+        return $this->port;
+    }
+    /*
+     * $ ./msfrpcd -h
+
+   Usage: msfrpcd <options>
+
+   OPTIONS:
+
+       -P <opt>  Specify the password to access msfrpcd
+       -S        Disable SSL on the RPC socket
+       -U <opt>  Specify the username to access msfrpcd
+       -a <opt>  Bind to this IP address
+       -f        Run the daemon in the foreground
+       -h        Help banner
+       -n        Disable database
+       -p <opt>  Bind to this port instead of 55553
+       -u <opt>  URI for Web server
+     */
+
+    // ************  msf_auth() ************ //
+
+    /**
+     * @param int $port
+     */
+    private function setPort(int $port): void
+    {
+        $this->port = $port;
+    }
+
+    // ************ msf_cmd() ************ //
+
+    /**
+     * @return string
+     */
+    private function getWebServerURI(): string
+    {
+        return $this->webServerURI;
+    }
+
+
+    //Genereting methods with
+
+    /**
+     * @param string $webServerURI
+     */
+    private function setWebServerURI(string $webServerURI): void
+    {
+        $this->webServerURI = $webServerURI;
     }
 
     /*
@@ -610,30 +624,22 @@ class MsfRpcClient
 
     // ************ msf_console() ************ //
 
-    protected function msfRequest($client_request)
+    /**
+     * @return string
+     */
+    private function getToken(): string
     {
-        $packer = new Packer();
-        $msgpack_data = $packer->pack($client_request);
-
-        $url = "$this->ssl" . $this->ip . ":$this->port$this->webServerURI";
-        $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
-        $postfields = $msgpack_data;
-        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
-
-        $unpacker = new BufferUnpacker();
-        $unpacker->reset($return_array['FILE']);
-        $msgunpack_data = $unpacker->unpack();
-
-        return $msgunpack_data;
+        return $this->token;
     }
 
     // ************ msf_execute() ************ //
 
-    function msf_execute($ip, $token, $cmd)
+    /**
+     * @param string $token
+     */
+    private function setToken(string $token): void
     {
-        $client_request = array("console.write", $token, '0', $cmd . "\n");
-        $server_write_response = $this->msfRequest($client_request);
-        return $server_write_response;
+        $this->token = $token;
     }
 
 }

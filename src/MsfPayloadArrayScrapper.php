@@ -3,7 +3,7 @@
 namespace Krzychu12350\Phpmetasploit;
 use Goutte\Client;
 //Laravel Framework
-//require_once dirname(__DIR__) . '\vendor\autoload.php';
+require_once dirname(__DIR__) . '\vendor\autoload.php';
 //require dirname(__DIR__) . '../../../autoload.php';
 //require dirname(__DIR__) . "./vendor/autoload.php";
 //require dirname(__DIR__) . '../../../autoload.php';
@@ -40,7 +40,7 @@ class MsfPayloadArrayScrapper
             "ReadPointer ]" => 'InputCommand',
             'id\n' => 'InputCommand',
             "1.2.3.4" => "IpAddress",
-            "ps" => "InputCommand",
+            //"ps" => "InputCommand",
 
         );
         $singleArray = array();

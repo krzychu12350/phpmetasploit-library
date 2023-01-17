@@ -51,6 +51,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         //$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir') . '/';
 
         /** @var InstallOperation $item */
+
         $this->createApiMethods();
         /*
         foreach ($event->getOperations() as $item) {
@@ -80,7 +81,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     // ************ msf_cmd() ************ //
 
-    private function createApiMethods()
+    public static function createApiMethods()
     {
 
 
@@ -212,18 +213,18 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
             $class = $namespace->addClass($className);
             $class->setExtends(MsfRpcClient::class);
-
+            /*
             $class->addProperty('token')
                 ->setType('string')
                 ->setPrivate();
-
+            */
             $class->addMethod('__construct')
                 ->setBody('parent::__construct
                 (MsfConnector::getUserPassword(),
                 MsfConnector::getSsl(), MsfConnector::getUserName(),
                 MsfConnector::getIp(), MsfConnector::getPort(),
                 MsfConnector::getWebServerURI());
-                $this->token = MsfConnector::getToken();
+                //$this->token = MsfConnector::getToken();
                 ');
 
 
@@ -284,7 +285,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                         $clientRequest = [' . $requestArray . '];' . "\n" . 'return $this->msfRequest($clientRequest);
                         ');
 
-                    for ($j = 1; $j <= count(current($apiMethods)); $j++) {
+                    for ($j = 0; $j <= count(current($apiMethods)); $j++) {
                         //dd($apiMethods[$i][$j]);
                         if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
                             $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
