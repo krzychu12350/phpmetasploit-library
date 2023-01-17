@@ -83,8 +83,8 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     public static function createApiMethods()
     {
-
-
+        //if (!directoryExists('methods'))
+        //    mkdir(dirname(__FILE__) . 'methods', 0777, true);
         //13 metod, które trzeba ręcznie napisać
         //-----------------------Core-----------------------
 
@@ -92,12 +92,12 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         $apiMethods = [
 
             //-----------------------Authentication-----------------------
-            [ "auth.login", "MyUserName", "MyPassword"],
-            [ "auth.logout", "<token>", "<LogoutToken>"],
-            [ "auth.token_add", "<token>", "<NewToken>"],
-            [ "auth.token_generate", "<token>"],
-            [ "auth.token_list", "<token>"],
-            [ "auth.token_remove", "<token>", "<TokenToBeRemoved>"],
+            ["auth.login", "MyUserName", "MyPassword"],
+            ["auth.logout", "<token>", "<LogoutToken>"],
+            ["auth.token_add", "<token>", "<NewToken>"],
+            ["auth.token_generate", "<token>"],
+            ["auth.token_list", "<token>"],
+            ["auth.token_remove", "<token>", "<TokenToBeRemoved>"],
 
             //-----------------------Core-----------------------
             ["core.add_module_path", "<token>", "<Path>"],
@@ -128,17 +128,17 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
             ["job.stop", "<token>", "JobID"],
 
             //-----------------------Modules-----------------------
-            [ "module.exploits", "<token>" ],
-            [ "module.auxiliary", "<token>" ],
-            [ "module.post", "<token>" ],
-            [ "module.payloads", "<token>" ],
-            [ "module.encoders", "<token>" ],
-            [ "module.nops", "<token>" ],
-            [ "module.info", "<token>", "ModuleType", "ModuleName" ],
-            [ "module.options", "<token>", "ModuleType", "ModuleName" ],
-            [ "module.compatible_payloads", "<token>", "ModuleName" ],
+            ["module.exploits", "<token>"],
+            ["module.auxiliary", "<token>"],
+            ["module.post", "<token>"],
+            ["module.payloads", "<token>"],
+            ["module.encoders", "<token>"],
+            ["module.nops", "<token>"],
+            ["module.info", "<token>", "ModuleType", "ModuleName"],
+            ["module.options", "<token>", "ModuleType", "ModuleName"],
+            ["module.compatible_payloads", "<token>", "ModuleName"],
             //[ "module.target_compatible_payloads", "<token>", "ModuleName", 1 ],
-            [ "module.compatible_sessions", "<token>", "ModuleName" ],
+            ["module.compatible_sessions", "<token>", "ModuleName"],
             //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
             //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
             // Wyrzuca błąd przy nawiasach klamrowych może byc jedynie zagnieżdzona jeszcze tablica
@@ -206,18 +206,18 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
             $file->setStrictTypes(); // adds declare(strict_types=1)
 
             $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit');
-            //$namespace->addUse('Krzychu12350\Phpmetasploit\MsfConnector');
 
             //$methodsGroup = ucwords('core');
             $className = ucwords($methodsGroup) . 'ApiMethods';
 
             $class = $namespace->addClass($className);
             $class->setExtends(MsfRpcClient::class);
+
             /*
-            $class->addProperty('token')
-                ->setType('string')
-                ->setPrivate();
-            */
+             $class->addProperty('token')
+                 ->setType('string')
+                 ->setPrivate();
+             */
             $class->addMethod('__construct')
                 ->setBody('parent::__construct
                 (MsfConnector::getUserPassword(),
@@ -260,7 +260,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                     foreach ($apiMethods[$i] as $value) {
                         if (str_contains($value, "<") || str_contains($value, ">")) {
                             $elem = '$' . lcfirst(trim($value, '<>'));
-                            if (str_contains($value, "token")){
+                            if (str_contains($value, "token")) {
                                 $elem = '$this->' . lcfirst(trim($value, '<>'));
                             }
                             $requestArray[] = $elem;
@@ -285,7 +285,8 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                         $clientRequest = [' . $requestArray . '];' . "\n" . 'return $this->msfRequest($clientRequest);
                         ');
 
-                    for ($j = 0; $j <= count(current($apiMethods)); $j++) {
+                    //dd($apiMethods);
+                    for ($j = 1; $j <= count(current($apiMethods)); $j++) {
                         //dd($apiMethods[$i][$j]);
                         if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
                             $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
@@ -294,9 +295,72 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
             }
 
-            //file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
-            file_put_contents(dirname(__FILE__) . '\\'. $className . '.php', $file);
 
+            /*
+            if ($className == "ConsoleApiMethods") {
+                $method = $class->addMethod('write')
+                    ->setBody('
+                        $clientRequest = ["console.write", $this->token, $consoleId, $content];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("consoleId");
+                $method->addParameter("content");
+
+                $method = $class->addMethod('read')
+                    ->setBody('
+                        $clientRequest = ["console.read", $this->token, $consoleId];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("consoleId");
+            }
+            if ($className == "ModuleApiMethods") {
+                //[ "module.encode", "<token>", "Data", "EncoderModule", ["Option1" => "Value1", "Option2" => "Value2"]],
+                $method = $class->addMethod('encode')
+                    ->setBody('
+                        $clientRequest = [$token, $data, $encoderModule, $optionsArray];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("token");
+                $method->addParameter("data");
+                $method->addParameter("encoderModule");
+                $method->addParameter("optionsArray");
+
+                $method = $class->addMethod('execute')
+                    ->setBody('
+                        $clientRequest = [$token, $moduleType, $moduleName,$optionsArray];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("token");
+                $method->addParameter("moduleType");
+                $method->addParameter("moduleName");
+                $method->addParameter("optionsArray");
+                //[ "module.execute", "<token>", "ModuleType", "ModuleName", [ "RHOST" => "1.2.3.4", "RPORT" => "80"]],
+                //dd($method);
+
+                // "module.target_compatible_payloads", "<token>", "ModuleName", 1 ],
+                $method = $class->addMethod('targetCompatiblePayloads')
+                    ->setBody('
+                        $clientRequest = [$token, $moduleName, $target];'
+                        . "\n" . 'return $this->msfRequest($clientRequest);');
+                $method->addParameter("token");
+                $method->addParameter("moduleName");
+                $method->addParameter("target");
+
+            }
+            */
+
+            //file_put_contents("E:\\phpmetasploit\\package\\phpmetasploit\src\\".$className.'.php', $file);
+            file_put_contents(dirname(__FILE__) . '\\' . $className . '.php', $file);
+
+            //dd(dirname(__FILE__));
+
+            //spl_autoload_register($this->my_autoloader($className));
+            //$test = new Test();
+            //spl_autoload_register('custom_autoloader');
+
+
+            //$printer = new PhpGenerator\Printer;
+            //echo $printer->printNamespace($namespace);
+            // = fopen($className, "w") or die("Unable to create file!");
+            //fwrite($myfile, $class);
+            //($myfile);
+            //return $class;
         }
     }
 }
