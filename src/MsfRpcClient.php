@@ -637,7 +637,7 @@ class MsfRpcClient
     /**
      * @param string $token
      */
-    private function setToken(string $token): void
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
