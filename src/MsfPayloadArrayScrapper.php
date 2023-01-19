@@ -23,6 +23,7 @@ class MsfPayloadArrayScrapper
             ->filter('.language-bash > .token-line > .code-line-content')
             ->each(function ($node) {
                 $line = $node->text();
+
                 if (str_contains($line, '[') and str_contains($line, '{'))
                     return $this->stringToArrayProcessor(str_replace("{", '"Options" ]', $line));
                 elseif (!str_contains($line, '[') or str_contains($line, 'Bad'))
@@ -36,17 +37,35 @@ class MsfPayloadArrayScrapper
     {
         $replacements = array(
             '0' => 'ConsoleID',
-            'version\n' => 'Command',
-            "ReadPointer ]" => 'InputCommand',
-            'id\n' => 'InputCommand',
+            'versionn' => 'InputCommand',
+            '"ReadPointer ]' => 'InputCommand',
+            'idn' => 'InputCommand',
             "1.2.3.4" => "IpAddress",
+            "4444" => "Port",
+            "1" => "SessionID",
             //"ps" => "InputCommand",
 
         );
         $singleArray = array();
-        foreach (explode('"', $stringArray) as $key => $singleElement)
-            if ($key % 2 != 0)
+        foreach (explode('"', $stringArray) as $key => $singleElement) {
+            //var_dump("new");
+            //var_dump($singleElement);
+            $singleElement = preg_replace('/[#$%^&*()+= \-\[\]\';,\/{}|":?~\\\\]/', '', $singleElement);
+           // if($singleElement != "")
+                //var_dump($singleElement);
+            //var_dump($string);
+            if($singleElement != "")
                 $singleArray[] = strtr($singleElement, $replacements);
+            //var_dump($singleArray);
+
+
+
+
+
+        }
+
+        //var_dump($singleArray);
+
 
         return $singleArray;
     }

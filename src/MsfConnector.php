@@ -111,19 +111,19 @@ class MsfConnector
     /**
      * @return string
      */
-    /*
+
     public static function getToken(): string
     {
         return self::$token;
     }
-    */
+
     /**
      * @param string $token
      */
-    /*
+
     public static function setToken(string $token): void
     {
         self::$token = $token;
     }
-    */
+
 }

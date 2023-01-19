@@ -78,7 +78,7 @@ class MsfRpcClient
         $generatedToken = $msgunpack_data["token"];
 
         //$this->setToken($generatedToken);
-        //MsfConnector::setToken($generatedToken);
+        MsfConnector::setToken($generatedToken);
 
         //Generating API Methods from array
         //$this->createApiMethods();

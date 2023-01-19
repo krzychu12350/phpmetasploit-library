@@ -171,6 +171,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
         $msfPayloadArrayScrapper = new MsfPayloadArrayScrapper();
         $apiMethods = $msfPayloadArrayScrapper->getArraysPayloadsFromWebsite();
+        //var_dump($apiMethods);
         //dd($apiMethods);
         //TO DO - Passing arguments to dynamically creating methods
         /*
@@ -224,7 +225,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                 MsfConnector::getSsl(), MsfConnector::getUserName(),
                 MsfConnector::getIp(), MsfConnector::getPort(),
                 MsfConnector::getWebServerURI());
-                //$this->token = MsfConnector::getToken();
+                $this->token = MsfConnector::getToken();
                 ');
 
 
@@ -236,11 +237,17 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                 //dd(strtok($apiMethods[$i][0], '.'), $methodsGroup);
                 if (strtok($apiMethods[$i][0], '.') == $methodsGroup) {
 
-                    $substr1 = substr($apiMethods[$i][0], strpos($apiMethods[$i][0], ".") + 1);
-                    if (str_contains($substr1, '_'))
-                        $substr1 = explode('_', $substr1)[0] . ucwords(explode('_', $substr1)[1]);
-
-                    $method = $class->addMethod($substr1);
+                    $substr = substr($apiMethods[$i][0], strpos($apiMethods[$i][0], ".") + 1);
+                    //print_r(explode("_",ucwords($substr1)));
+                   // if (str_contains($substr1, '_'))
+                    //    $substr1 = explode('_', $substr1);
+                     //   print_r($substr1);
+                        //$substr1 = explode('_', $substr1)[0] . ucwords(explode('_', $substr1)[1]);
+                    $methodName = lcfirst(str_replace("_","", join('_',
+                        array_map('ucfirst', explode('_', $substr)))));
+                    //var_dump($methodName);
+                    //$substr1 = explode('_', ucfirst($substr1));
+                    $method = $class->addMethod($methodName);
 
 
                     //dd($substr1, $substr2);
@@ -286,9 +293,10 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                         ');
 
                     //dd($apiMethods);
-                    for ($j = 1; $j <= count(current($apiMethods)); $j++) {
+                    for ($j = 1; $j <= count(current($apiMethods)) + 1; $j++) {
                         //dd($apiMethods[$i][$j]);
                         if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
+                            //var_dump($apiMethods[$i][$j]);
                             $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
                     }
                 }
