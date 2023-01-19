@@ -122,7 +122,7 @@ class MsfRpcClient
         return $return_array;
     }
 
-    public static function createApiMethods()
+    protected static function createApiMethods()
     {
         //if (!directoryExists('methods'))
         //    mkdir(dirname(__FILE__) . 'methods', 0777, true);
@@ -423,7 +423,7 @@ class MsfRpcClient
         return $server_read_response;
     }
 
-    public function msfRequest($client_request)
+    protected function msfRequest($client_request)
     {
         $packer = new Packer();
         $msgpack_data = $packer->pack($client_request);
