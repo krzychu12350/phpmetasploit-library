@@ -203,17 +203,18 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         foreach ($filesArray as $methodsGroup) {
 
             $file = new PhpGenerator\PhpFile;
-            $file->addComment('This file is auto-generated.');
+            $file->addComment('This is auto-generated class using Nette PHP Generator');
             $file->setStrictTypes(); // adds declare(strict_types=1)
 
             $namespace = $file->addNamespace('Krzychu12350\Phpmetasploit');
-
+            $namespace->addUse(\Exception::class);
             //$methodsGroup = ucwords('core');
             $className = ucwords($methodsGroup) . 'ApiMethods';
 
             $class = $namespace->addClass($className);
             $class->setExtends(MsfRpcClient::class);
-
+            $class->addComment("@author Krzysztof Karaś");
+            $class->addComment("@access public");
             /*
              $class->addProperty('token')
                  ->setType('string')
@@ -275,7 +276,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                             if (str_contains($value, ".")) $requestArray[] = '"' . $value . '"';
                             else {
                                 $requestArray[] = "$" . lcfirst($value);
-                                $method->addComment("@param " . lcfirst($value));
+                                $method->addComment("@param $" . lcfirst($value));
                             }
 
                         }
@@ -287,10 +288,16 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                     //dd($requestArray);
 
                     // END processing nested array to create client_request arrays
-
-                    $method->setBody('
-                        $clientRequest = [' . $requestArray . '];' . "\n" . 'return $this->msfRequest($clientRequest);
+                    //  $clientRequest = [' . $requestArray . '];' . "\n" .
+                    $method->setBody('$responseData = $this->msfRequest([' . $requestArray . ']);' . "\n" .
+                        'if (array_key_exists("error", $responseData))' . "\n\t" .
+                        'throw new Exception($responseData["error_message"], $responseData["error_code"]);'
+                        . "\n" . 'else return $responseData;
                         ');
+                    $method->addComment("@throws Exception");
+                    $method->addComment("@return array");
+                    $method->addComment("@access public");
+                    $method->setReturnType('array');
 
                     //dd($apiMethods);
                     for ($j = 1; $j <= count(current($apiMethods)) + 1; $j++) {

@@ -2,14 +2,38 @@
 
 namespace Krzychu12350\Phpmetasploit;
 
+/**
+ *
+ */
 class MsfConnector
 {
+    /**
+     * @var string
+     */
     private static string $ssl;
+    /**
+     * @var string
+     */
     private static string $userName;
+    /**
+     * @var string
+     */
     private static string $ip;
+    /**
+     * @var int
+     */
     private static int $port;
+    /**
+     * @var string
+     */
     private static string $webServerURI;
+    /**
+     * @var string
+     */
     private static string $userPassword;
+    /**
+     * @var string
+     */
     private static string $token;
 
     /**
