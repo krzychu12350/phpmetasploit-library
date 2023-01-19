@@ -30,7 +30,7 @@ class MsfRpcClient
     private string $ip;
     private int $port;
     private string $webServerURI;
-    protected string $token;
+    protected ?string $token = null;
 
     public function __construct($userPassword, $ssl, $userName, $ip, $port, $webServerURI)
     {
@@ -635,9 +635,9 @@ class MsfRpcClient
     // ************ msf_execute() ************ //
 
     /**
-     * @param string $token
+     * @param string|null $token
      */
-    public function setToken(string $token): void
+    public function setToken(?string $token): void
     {
         $this->token = $token;
     }
