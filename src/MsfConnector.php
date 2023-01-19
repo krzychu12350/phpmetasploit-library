@@ -2,9 +2,6 @@
 
 namespace Krzychu12350\Phpmetasploit;
 
-/**
- *
- */
 class MsfConnector
 {
     /**
@@ -32,9 +29,9 @@ class MsfConnector
      */
     private static string $userPassword;
     /**
-     * @var string
+     * @var string|null
      */
-    private static string $token;
+    private static ?string $token = null;
 
     /**
      * @return string
@@ -133,19 +130,19 @@ class MsfConnector
     }
 
     /**
-     * @return string
+     * @return string|null
      */
 
-    public static function getToken(): string
+    public static function getToken(): ?string
     {
         return self::$token;
     }
 
     /**
-     * @param string $token
+     * @param string|null $token
      */
 
-    public static function setToken(string $token): void
+    public static function setToken(?string $token): void
     {
         self::$token = $token;
     }
