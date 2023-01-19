@@ -275,7 +275,10 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                         } else {
                             if (str_contains($value, ".")) $requestArray[] = '"' . $value . '"';
                             else {
-                                $requestArray[] = "$" . lcfirst($value);
+                                var_dump(lcfirst($value));
+                                if($methodsGroup == 'console' && lcfirst($value) == 'inputCommand')
+                                    $requestArray[] = "$" . lcfirst($value) . ' ."\n"';
+                                else $requestArray[] = "$" . lcfirst($value);
                                 $method->addComment("@param $" . lcfirst($value));
                             }
 
