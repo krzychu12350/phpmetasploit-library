@@ -18,6 +18,14 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
     protected $composer;
     protected $io;
 
+    public static function getSubscribedEvents()
+    {
+        return [
+            'post-package-install' => 'onPostPackageInstallOrUpdate',
+            'post-package-update' => 'onPostPackageInstallOrUpdate'
+        ];
+    }
+
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->composer = $composer;
@@ -36,14 +44,6 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
     public function uninstall(Composer $composer, IOInterface $io)
     {
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return [
-            'post-package-install' => 'onPostPackageInstallOrUpdate',
-            'post-package-update' => 'onPostPackageInstallOrUpdate'
-        ];
     }
 
     public function onPostPackageInstallOrUpdate(PackageEvent $event)
@@ -66,20 +66,6 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         */
 
     }
-
-    private function autoGenerateFiles(PostFileDownloadEvent $event)
-    {
-        $protocol = parse_url($event->getName(), PHP_URL_SCHEME);
-        /*
-        if ($protocol === 's3') {
-            // ...
-        }
-        */
-        var_dump($event->getName());
-
-    }
-
-    // ************ msf_cmd() ************ //
 
     public static function createApiMethods()
     {
@@ -240,11 +226,11 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
 
                     $substr = substr($apiMethods[$i][0], strpos($apiMethods[$i][0], ".") + 1);
                     //print_r(explode("_",ucwords($substr1)));
-                   // if (str_contains($substr1, '_'))
+                    // if (str_contains($substr1, '_'))
                     //    $substr1 = explode('_', $substr1);
-                     //   print_r($substr1);
-                        //$substr1 = explode('_', $substr1)[0] . ucwords(explode('_', $substr1)[1]);
-                    $methodName = lcfirst(str_replace("_","", join('_',
+                    //   print_r($substr1);
+                    //$substr1 = explode('_', $substr1)[0] . ucwords(explode('_', $substr1)[1]);
+                    $methodName = lcfirst(str_replace("_", "", join('_',
                         array_map('ucfirst', explode('_', $substr)))));
                     //var_dump($methodName);
                     //$substr1 = explode('_', ucfirst($substr1));
@@ -276,7 +262,7 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                             if (str_contains($value, ".")) $requestArray[] = '"' . $value . '"';
                             else {
                                 var_dump(lcfirst($value));
-                                if($methodsGroup == 'console' && lcfirst($value) == 'inputCommand')
+                                if ($methodsGroup == 'console' && lcfirst($value) == 'inputCommand')
                                     $requestArray[] = "$" . lcfirst($value) . ' ."\n"';
                                 else $requestArray[] = "$" . lcfirst($value);
                                 $method->addComment("@param $" . lcfirst($value));
@@ -293,6 +279,8 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                     // END processing nested array to create client_request arrays
                     //  $clientRequest = [' . $requestArray . '];' . "\n" .
                     $method->setBody('$responseData = $this->msfRequest([' . $requestArray . ']);' . "\n" .
+                        'if ($responseData["result"] === "failure")' . "\n\t" .
+                        'throw new Exception("Unprocessable Content", 422);' . "\n" .
                         'if (array_key_exists("error", $responseData))' . "\n\t" .
                         'throw new Exception($responseData["error_message"], $responseData["error_code"]);'
                         . "\n" . 'else return $responseData;
@@ -380,5 +368,19 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
             //($myfile);
             //return $class;
         }
+    }
+
+    // ************ msf_cmd() ************ //
+
+    private function autoGenerateFiles(PostFileDownloadEvent $event)
+    {
+        $protocol = parse_url($event->getName(), PHP_URL_SCHEME);
+        /*
+        if ($protocol === 's3') {
+            // ...
+        }
+        */
+        var_dump($event->getName());
+
     }
 }
