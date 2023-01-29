@@ -279,8 +279,8 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
                     // END processing nested array to create client_request arrays
                     //  $clientRequest = [' . $requestArray . '];' . "\n" .
                     $method->setBody('$responseData = $this->msfRequest([' . $requestArray . ']);' . "\n" .
-                        //'if ($responseData["result"] === "failure")' . "\n\t" .
-                        //'throw new Exception("Unprocessable Content", 422);' . "\n" .
+                        'if (array_key_exists("result", $responseData) && $responseData["result"] === "failure")' . "\n\t" .
+                        'throw new Exception("Unprocessable Content", 422);' . "\n" .
                         'if (array_key_exists("error", $responseData))' . "\n\t" .
                         'throw new Exception($responseData["error_message"], $responseData["error_code"]);'
                         . "\n" . 'else return $responseData;
