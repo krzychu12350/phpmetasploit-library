@@ -45,6 +45,7 @@ class MsfPayloadArrayScrapper
             "1.2.3.4" => "IpAddress",
             "4444" => "Port",
             "1" => "SessionId",
+            "scriptname" => "scriptName"
             //"ps" => "InputCommand",
 
         );
