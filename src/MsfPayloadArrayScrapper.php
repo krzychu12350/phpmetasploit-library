@@ -36,13 +36,15 @@ class MsfPayloadArrayScrapper
     private function stringToArrayProcessor($stringArray): array
     {
         $replacements = array(
-            '0' => 'ConsoleID',
+            'ConsoleID' => 'consoleId',
+            'SessionID' => 'sessionId',
+            '0' => 'ConsoleId',
             'versionn' => 'InputCommand',
             '"ReadPointer ]' => 'InputCommand',
             'idn' => 'InputCommand',
             "1.2.3.4" => "IpAddress",
             "4444" => "Port",
-            "1" => "SessionID",
+            "1" => "SessionId",
             //"ps" => "InputCommand",
 
         );
