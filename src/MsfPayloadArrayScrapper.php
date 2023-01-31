@@ -36,6 +36,10 @@ class MsfPayloadArrayScrapper
     private function stringToArrayProcessor($stringArray): array
     {
         $replacements = array(
+            'MyUserName' => 'userName',
+            'MyPassword' => 'userPassword',
+            'ThreadID' => 'threadId',
+            'JobID' => 'jobId',
             'ConsoleID' => 'consoleId',
             'SessionID' => 'sessionId',
             '0' => 'ConsoleId',
