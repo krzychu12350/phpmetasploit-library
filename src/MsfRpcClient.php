@@ -5,6 +5,7 @@ namespace Krzychu12350\Phpmetasploit;
 use MessagePack\BufferUnpacker;
 use MessagePack\Packer;
 use Nette\PhpGenerator as PhpGenerator;
+use PHPUnit\Util\Exception;
 use function PHPUnit\Framework\directoryExists;
 
 //require dirname(__DIR__) . '\vendor\autoload.php';
@@ -62,8 +63,9 @@ class MsfRpcClient
 
     public function msfAuth()
     {
-        $data = array("auth.login", $this->userName, $this->userPassword);
+        //$data = array("auth.login", $this->userName, $this->userPassword);
 
+        /*
         $packer = new Packer();
         $msgpack_data = $packer->pack($data);
 
@@ -75,13 +77,18 @@ class MsfRpcClient
         $unpacker = new BufferUnpacker();
         $unpacker->reset($return_array['FILE']);
         $msgunpack_data = $unpacker->unpack();
-        $generatedToken = $msgunpack_data["token"];
-
+        */
         //$this->setToken($generatedToken);
-        MsfConnector::setToken($generatedToken);
 
-        //Generating API Methods from array
-        //$this->createApiMethods();
+
+        $responseData = $this->msfRequest(array("auth.login", $this->userName, $this->userPassword));
+        if(!array_key_exists('token', $responseData)) {
+            throw new \MessagePack\Exception\InsufficientDataException("Check the MSFRPCD utility/MSGRPC plugin
+                settings or enter the correct username and password ", 500);
+        }
+        $generatedToken = $responseData["token"];
+
+        MsfConnector::setToken($generatedToken);
 
         return $generatedToken;
     }
@@ -425,19 +432,24 @@ class MsfRpcClient
 
     protected function msfRequest($client_request)
     {
-        $packer = new Packer();
-        $msgpack_data = $packer->pack($client_request);
+        try {
+            $packer = new Packer();
+            $msgpack_data = $packer->pack($client_request);
 
-        $url = "$this->ssl" . $this->ip . ":$this->port$this->webServerURI";
-        $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
-        $postfields = $msgpack_data;
-        $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
+            $url = "$this->ssl" . $this->ip . ":$this->port$this->webServerURI";
+            $httpheader = array("Host: RPC Server", "Content-Length: " . strlen($msgpack_data), "Content-Type: binary/message-pack");
+            $postfields = $msgpack_data;
+            $return_array = $this->curlPost($url, $this->port, $httpheader, $postfields);
 
-        $unpacker = new BufferUnpacker();
-        $unpacker->reset($return_array['FILE']);
-        $msgunpack_data = $unpacker->unpack();
+            $unpacker = new BufferUnpacker();
+            $unpacker->reset($return_array['FILE']);
+            $msgunpack_data = $unpacker->unpack();
 
-        return $msgunpack_data;
+            return $msgunpack_data;
+        }
+        catch (\MessagePack\Exception\InsufficientDataException $e) {
+            throw new \MessagePack\Exception\InsufficientDataException("Check the MSFRPCD utility/MSGRPC plugin settings", 500);
+        }
     }
 
     /**
