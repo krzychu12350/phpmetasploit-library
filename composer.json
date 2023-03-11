@@ -22,7 +22,8 @@
     },
     "scripts": {
         "test": "@php --version",
-        "generate": "Krzychu12350\\Phpmetasploit\\PluginInstaller::createApiMethods"
+        "generateOld": "Krzychu12350\\Phpmetasploit\\PluginInstaller::createApiMethods",
+        "generate": "Krzychu12350\\Phpmetasploit\\MsfLibraryGenerator::generateLibrary"
     },
     "require": {
         "php": ">=8.1.2",
