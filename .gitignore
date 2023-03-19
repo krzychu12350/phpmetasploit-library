@@ -1,5 +1,6 @@
 vendor/
 composer.lock
+.phpunit.result.cache
 src/AuthApiMethods.php
 src/ConsoleApiMethods.php
 src/CoreApiMethods.php
