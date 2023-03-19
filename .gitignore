@@ -7,3 +7,4 @@ src/JobApiMethods.php
 src/ModuleApiMethods.php
 src/PluginApiMethods.php
 src/SessionApiMethods.php
+.phpunit.result.cache
