@@ -11,6 +11,9 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
+        "classmap": [
+            "src/"
+        ],
         "psr-4": {
             "Krzychu12350\\Phpmetasploit\\": "src",
             "Krzychu12350\\Phpmetasploit\\MsfRpcClient\\": "",
@@ -21,7 +24,9 @@
         "class": "Krzychu12350\\Phpmetasploit\\PluginInstaller"
     },
     "scripts": {
-        "test": "@php --version",
+        "tests": [
+            "phpunit tests"
+        ],
         "generateOld": "Krzychu12350\\Phpmetasploit\\PluginInstaller::createApiMethods",
         "generate": "Krzychu12350\\Phpmetasploit\\MsfLibraryGenerator::generateLibrary"
     },
@@ -36,7 +41,7 @@
         "composer-plugin-api": "^2.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.21",
+        "phpunit/phpunit": "^10.0.16",
         "composer/composer": "^2.0"
     }
 }

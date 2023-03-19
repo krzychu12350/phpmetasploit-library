@@ -3,7 +3,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Krzychu12350\Phpmetasploit\MsfRpcClient;
 
-class MsfRpcClientTests extends TestCase
+class MsfRpcClientTest extends TestCase
 {
 
     /**

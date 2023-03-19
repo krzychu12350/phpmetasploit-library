@@ -1,0 +1,1 @@
+{"version":1,"defects":{"MsfRpcClientTest::shouldReturnTheArrayWithResultEqualsSuccess":8},"times":{"AuthApiMethodsTest::shouldReturnTrue":0.003,"MsfRpcClientTest::mustReturnTheSameLength":0.043,"MsfRpcClientTest::shouldReturnTheArrayWithResultEqualsSuccess":0.093}}

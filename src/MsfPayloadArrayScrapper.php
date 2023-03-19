@@ -36,15 +36,13 @@ class MsfPayloadArrayScrapper
             'ConsoleID' => 'consoleId',
             'SessionID' => 'sessionId',
             '0' => 'ConsoleId',
-            'versionn' => 'InputCommand',
+            'version\n' => 'InputCommand',
             '"ReadPointer ]' => 'InputCommand',
             'idn' => 'InputCommand',
             "1.2.3.4" => "IpAddress",
             "4444" => "Port",
             "1" => "SessionId",
             "scriptname" => "scriptName"
-            //"ps" => "InputCommand",
-
         );
         $singleArray = array();
         foreach (explode('"', $stringArray) as $key => $singleElement) {

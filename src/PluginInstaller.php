@@ -8,7 +8,6 @@ use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 
-
 class PluginInstaller implements PluginInterface, EventSubscriberInterface
 {
     protected $composer;
@@ -43,3 +42,5 @@ class PluginInstaller implements PluginInterface, EventSubscriberInterface
         $metasploitLibraryGenerator::generateLibrary();
     }
 }
+
+
