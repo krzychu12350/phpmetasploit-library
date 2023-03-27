@@ -36,7 +36,7 @@ class MsfPayloadArrayScrapper
             'ConsoleID' => 'consoleId',
             'SessionID' => 'sessionId',
             '0' => 'ConsoleId',
-            'version\n' => 'InputCommand',
+            'versionn' => 'InputCommand',
             '"ReadPointer ]' => 'InputCommand',
             'idn' => 'InputCommand',
             "1.2.3.4" => "IpAddress",
