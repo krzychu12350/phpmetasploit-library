@@ -73,12 +73,8 @@ class MsfLibraryGenerator
                     $method->addComment("@return array");
                     $method->addComment("@access public");
                     $method->setReturnType('array');
-
-                    //dd($apiMethods);
                     for ($j = 1; $j <= count(current($apiMethods)) + 1; $j++) {
-                        //dd($apiMethods[$i][$j]);
                         if (isset($apiMethods[$i][$j]) && $apiMethods[$i][$j] != '<token>')
-                            //var_dump($apiMethods[$i][$j]);
                             $method->addParameter(lcfirst(trim($apiMethods[$i][$j], '<>')));
                     }
                 }

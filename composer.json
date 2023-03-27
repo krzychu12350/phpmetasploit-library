@@ -1,6 +1,6 @@
 {
     "name": "krzychu12350/phpmetasploit",
-    "description": "This composer plugin allow to interact with Metasploit either through msfrpcd or the msgrpc plugin in msfconsole.",
+    "description": "This plugin allows to interact with Metasploit framework either through msfrpcd deamon or the msgrpc plugin running in msfconsole.",
     "type": "composer-plugin",
     "license": "MIT",
     "authors": [
@@ -27,7 +27,6 @@
         "tests": [
             "phpunit tests"
         ],
-        "generateOld": "Krzychu12350\\Phpmetasploit\\PluginInstaller::createApiMethods",
         "generate": "Krzychu12350\\Phpmetasploit\\MsfLibraryGenerator::generateLibrary"
     },
     "require": {
